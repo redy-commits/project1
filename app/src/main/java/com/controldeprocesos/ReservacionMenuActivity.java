@@ -13,7 +13,7 @@ import android.widget.ListView;
 public class ReservacionMenuActivity extends ListActivity{
 
     String[] menu={"Insertar registro","Eliminar registro","Consultar registro","Actualizar registro"};
-    String[] activities={"ReservacionInsertarActivity","ReservacionEliminarActivity","ReservacionConsultarActivity","ReservacionActualizarActivity"};
+    String[] activities={"ReservacionInsertarActivity","ReservacionBorrarActivity","ReservacionConsultarActivity","ReservacionActualizarActivity"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -19,8 +19,28 @@ public class ControlBDGpo16 {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);}
 
+    public String actualizar(Reservacion reservacion) {
+        if(verificarIntegridad(reservacion, 1)){
+            String[] id = {String.valueOf(reservacion.getIdReservacion())};
+            ContentValues cv = new ContentValues();
+            cv.put("idLocal",reservacion.getIdLocal());
+            cv.put("idDocente",reservacion.getIdDocente());
+            cv.put("horaInicio",reservacion.getHoraInicio());
+            cv.put("fecha",String.valueOf(reservacion.getFecha()));
+            cv.put("horaFin",reservacion.getHoraFin());
+            db.update("reservacion", cv, "idReservacion = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "La reservación "+reservacion.getIdReservacion()+" no existe";}}
+
+    public String eliminar(Reservacion reservacion) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("reservacion", "idReservacion='"+reservacion.getIdReservacion()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
-        private static final String BASE_DATOS = "controlProcesos.s3db";
+        private static final String BASE_DATOS = "db.s3db";
         private static final int VERSION = 1;
         public DatabaseHelper(Context context) {
             super(context, BASE_DATOS, null, VERSION);}
@@ -28,25 +48,25 @@ public class ControlBDGpo16 {
         @Override
         public void onCreate(SQLiteDatabase db) {
             try{
-                db.execSQL("CREATE TABLE reservacion(idReservacion INTEGER NOT NULL PRIMARY KEY,idLocal integer not null,idDocente integer not null,horaInicio VARCHAR(5) not null,fecha DATE not null,horaFin VARCHAR(5) not null);");
-                db.execSQL("CREATE TABLE ciclo(idCiclo INTEGER NOT NULL PRIMARY KEY,anio INTEGER NOT NULL,numCiclo INTEGER NOT NULL);");
-                db.execSQL("CREATE TABLE materia(codMateria VARCHAR(6) NOT NULL PRIMARY KEY,codigoEscuela varchar(10) not null,nombre VARCHAR(75) NOT NULL);");
-                db.execSQL("CREATE TABLE solicitudDeImpresiones(idSolicitud INTEGER NOT NULL PRIMARY KEY,numPaginas INTEGER NOT NULL,estadoAprobado boolean NOT NULL);");
-                db.execSQL("CREATE TABLE cargo(idCargo INTEGER NOT NULL PRIMARY KEY,nombreCargo VARCHAR(30) NOT NULL);");
-                db.execSQL("CREATE TABLE local(idLocal INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(10) NOT NULL);");
-                db.execSQL("CREATE TABLE docente(idDocente INTEGER NOT NULL PRIMARY KEY,idUsuario integer NOT NULL);");
-                db.execSQL("CREATE TABLE usuario(idUsuario INTEGER NOT NULL PRIMARY KEY,tipo VARCHAR(10) NOT NULL,contrasena VARCHAR(30) NOT NULL,nombre VARCHAR(75) NOT NULL,correo VARCHAR(75) NOT NULL);");
-                db.execSQL("CREATE TABLE accesoUsuario(idAcceso integer not null primary key,idUsuario integer not null,idPermiso integer not null);");
+                db.execSQL("CREATE TABLE reservacion(idReservacion INTEGER NOT NULL PRIMARY KEY,idLocal integer,idDocente integer,horaInicio VARCHAR(5),fecha DATE,horaFin VARCHAR(5));");
+                db.execSQL("CREATE TABLE ciclo(idCiclo INTEGER NOT NULL PRIMARY KEY,anio INTEGER,numCiclo INTEGER);");
+                db.execSQL("CREATE TABLE materia(codMateria VARCHAR(6) NOT NULL PRIMARY KEY,codigoEscuela varchar(10),nombre VARCHAR(75));");
+                db.execSQL("CREATE TABLE solicitudDeImpresiones(idSolicitud INTEGER NOT NULL PRIMARY KEY,numPaginas INTEGER,estadoAprobado boolean);");
+                db.execSQL("CREATE TABLE cargo(idCargo INTEGER NOT NULL PRIMARY KEY,nombreCargo VARCHAR(30));");
+                db.execSQL("CREATE TABLE local(idLocal INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(10));");
+                db.execSQL("CREATE TABLE docente(idDocente INTEGER NOT NULL PRIMARY KEY,idUsuario integer);");
+                db.execSQL("CREATE TABLE usuario(idUsuario INTEGER NOT NULL PRIMARY KEY,tipo VARCHAR(10),contrasena VARCHAR(30),nombre VARCHAR(75),correo VARCHAR(75));");
+                db.execSQL("CREATE TABLE accesoUsuario(idAcceso integer not null primary key,idUsuario integer,idPermiso integer);");
                 db.execSQL("CREATE TABLE encargadoDeImpresiones(idEncargado INTEGER NOT NULL PRIMARY KEY);");
-                db.execSQL("CREATE TABLE matricula(idMatricula INTEGER NOT NULL PRIMARY KEY,carnet varchar(7) not null,codMateria varchar(6) not null,idCiclo integer not null,numMatricula integer NOT NULL);");
-                db.execSQL("CREATE TABLE segundaRevision(numRev2 INTEGER NOT NULL PRIMARY KEY,idExamen integer not null,respSociedadEstud varchar(7) not null,idDocente integer not null,idOtroDocente integer not null,notaDefinitica float NOT NULL);");
-                db.execSQL("CREATE TABLE revision(numRev1 INTEGER NOT NULL PRIMARY KEY,nuevaNota float NOT NULL,observ text NOT NULL,asistio boolean NOT NULL,idExamen integer not null);");
-                db.execSQL("CREATE TABLE evaluacion(numEva INTEGER NOT NULL PRIMARY KEY,idDocente integer not null,codMateria varchar(6) not null,tipo VARCHAR(10) NOT NULL,alumnosEvaluados integer NOT NULL,fechaRealización date NOT NULL,fechaPublicacion date NOT NULL);");
-                db.execSQL("CREATE TABLE examenIndividual(idExamen INTEGER NOT NULL PRIMARY KEY,numEva integer not null,carnet integer not null,nota float NOT NULL);");
-                db.execSQL("CREATE TABLE escuela(codEscuela INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(75) NOT NULL);");
+                db.execSQL("CREATE TABLE matricula(idMatricula INTEGER NOT NULL PRIMARY KEY,carnet varchar(7),codMateria varchar(6),idCiclo integer,numMatricula integer);");
+                db.execSQL("CREATE TABLE segundaRevision(numRev2 INTEGER NOT NULL PRIMARY KEY,idExamen integer,respSociedadEstud varchar(7),idDocente integer,idOtroDocente integer,notaDefinitica float);");
+                db.execSQL("CREATE TABLE revision(numRev1 INTEGER NOT NULL PRIMARY KEY,nuevaNota float,observ text,asistio boolean,idExamen integer);");
+                db.execSQL("CREATE TABLE evaluacion(numEva INTEGER NOT NULL PRIMARY KEY,idDocente integer,codMateria varchar(6),tipo VARCHAR(10),alumnosEvaluados integer,fechaRealización date,fechaPublicacion date);");
+                db.execSQL("CREATE TABLE examenIndividual(idExamen INTEGER NOT NULL PRIMARY KEY,numEva integer,carnet integer,nota float);");
+                db.execSQL("CREATE TABLE escuela(codEscuela INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(75));");
                 db.execSQL("CREATE TABLE estudiante(carnet varchar(7) NOT NULL PRIMARY KEY);");
-                db.execSQL("CREATE TABLE permiso(idPermiso INTEGER NOT NULL PRIMARY KEY,descipcionP text NOT NULL);");
-                db.execSQL("CREATE TABLE catedra(idCatedra INTEGER NOT NULL primary key,idCiclo NOT NULL,codMateria varchar(6) NOT NULL,idDocente INTEGER NOT NULL);");
+                db.execSQL("CREATE TABLE permiso(idPermiso INTEGER NOT NULL PRIMARY KEY,descipcionP text);");
+                db.execSQL("CREATE TABLE catedra(idCatedra INTEGER NOT NULL primary key,idCiclo,codMateria varchar(6),idDocente INTEGER);");
                 db.execSQL("CREATE TABLE instructor_emite(carnet varchar(7) NOT NULL,idSolicitud integer not null,constraint PK_INSTRUCTOR_EMITE primary key (carnet,idSolicitud));");
                 db.execSQL("CREATE TABLE posee(idDocente INTEGER NOT NULL,idCargo integer NOT NULL,constraint PK_POSEE primary key (idDocente,idCargo));");
                 db.execSQL("CREATE TABLE emite(idDocente INTEGER NOT NULL,idSolicitud NOT NULL,constraint PK_EMITE primary key (idDocente,idSolicitud));");
@@ -65,20 +85,19 @@ public class ControlBDGpo16 {
     public void cerrar(){DBHelper.close();}
 
     public String insertar(Reservacion reservacion){
-        String regInsertados="Registro insertado #";
+        String regInsertados="¡Reservación registrada!";
         long contador=0;
         ContentValues reservacion_ = new ContentValues();
         reservacion_.put("idReservacion",reservacion.getIdReservacion());
         reservacion_.put("idLocal",reservacion.getIdLocal());
-        reservacion_.put("iddocente",reservacion.getIdDocente());
+        reservacion_.put("idDocente",reservacion.getIdDocente());
         reservacion_.put("horaInicio",reservacion.getHoraInicio());
         reservacion_.put("fecha",reservacion.getFecha().toString());
         reservacion_.put("horaFin",reservacion.getHoraFin());
         contador=db.insert("reservacion", null, reservacion_);
 
-        if(contador==-1 || contador==0){
-            regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
-        else{regInsertados=regInsertados+contador;}
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
         return regInsertados;}
 
     public Reservacion consultarReservacion(int idReservacion){
@@ -93,19 +112,18 @@ public class ControlBDGpo16 {
             reservacion.setHoraInicio(cursor.getString(3));
             reservacion.setFecha(Date.valueOf(cursor.getString(4)));
             reservacion.setHoraFin(cursor.getString(5));
-            return reservacion;}
-        else{return null;}}
+            return reservacion;}else{return null;}}
 
     private boolean verificarIntegridad(Object dato, int relacion) throws SQLException{
         switch(relacion){
             case 1:{
-                //Verificar que al insertar una reservación exista el local que se reserva y el docente que reserva.
+                //Verificar que exista la reservación para poder actualizarla.
                 Reservacion reservacion = (Reservacion)dato;
-                String[] id1 = {String.valueOf(reservacion.getIdReservacion())};
-                Cursor c = db.query("local", null, "idReservacion = ?", id1, null,null, null);
-
-                if(c.moveToFirst()){
-                    //Se encontraron datos.
+                String[] id = {String.valueOf(reservacion.getIdReservacion())};
+                abrir();
+                Cursor c2 = db.query("reservacion", null, "idReservacion = ?", id, null, null,null);
+                if(c2.moveToFirst()){
+                    //Se encontró la reservación.
                     return true;}
                 return false;}
             default:
