@@ -1,13 +1,12 @@
 package com.controldeprocesos;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class ReservacionBorrarActivity extends AppCompatActivity {
+public class ReservacionBorrarActivity extends Activity {
 
     EditText edtIdReservacion;
     ControlBDGpo16 helper;

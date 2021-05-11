@@ -1,14 +1,13 @@
 package com.controldeprocesos;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReservacionConsultarActivity extends AppCompatActivity {
+public class ReservacionConsultarActivity extends Activity {
 
     private ControlBDGpo16 helper;
     private EditText edtIdReservacion;
@@ -39,7 +38,7 @@ public class ReservacionConsultarActivity extends AppCompatActivity {
             Toast.makeText(this, "La reservación " +edtIdReservacion.getText().toString()+ " no ha sido encontrada", Toast.LENGTH_LONG).show();
         else{
             txtIdDocente.setText("Docente: "+reservacion.getIdDocente());
-            txtIdLocal.setText("local: "+reservacion.getIdLocal());
+            txtIdLocal.setText("Local: "+reservacion.getIdLocal());
             txtHoraFin.setText("Hora de fin: "+reservacion.getHoraFin());
             txtHoraInicio.setText("Hora de inicio: "+reservacion.getHoraInicio());
             txtFecha.setText("Fecha: "+reservacion.getFecha());}}}

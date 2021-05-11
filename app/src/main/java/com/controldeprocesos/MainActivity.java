@@ -31,13 +31,10 @@ public class MainActivity extends ListActivity {
                 Class<?> clase=Class.forName("com.controldeprocesos."+nombreValue);
                 Intent inte = new Intent(this,clase);
                 this.startActivity(inte);
-            }catch(ClassNotFoundException e){
-                e.printStackTrace();}
+            }catch(ClassNotFoundException e){e.printStackTrace();}
 
         }else{
             BDhelper.abrir();
             String tost=BDhelper.LlenarBDGpo16();
             BDhelper.cerrar();
-            Toast.makeText(this, tost, Toast.LENGTH_SHORT).show();}}
-
-}
+            Toast.makeText(this, tost, Toast.LENGTH_SHORT).show();}}}
