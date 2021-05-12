@@ -6,13 +6,17 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.sql.Date;
 
 public class ControlBDGpo16 {
     private static final String[] camposReservacion = new String [] {"idReservacion","idLocal","idDocente","horaInicio","fecha","horaFin"};
-    private static final String[] camposCiclo= new String [] {"idciclo","anio","numCiclo"};
+    private static final String[] camposCiclo= new String [] {"idCiclo","anio","numCiclo"};
     private static final String[] camposMateria= new String [] {"codMateria","codEscuela","nombre"};
+    private static final String[] camposUsuario= new String [] {"idUsuario","tipo","contrasena","nombre","correo"};
+    private static final String[] camposAccesoUsuario= new String [] {"idAcceso","idUsuario","idPermiso"};
+    private static final String[] camposPermiso= new String [] {"idPermiso","descripcion"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -170,6 +174,164 @@ public class ControlBDGpo16 {
         regAfectados+=contador;
         return regAfectados;}
 
+    //Métodos para la tabla Usuario.
+
+    public boolean insertar(Usuario usuario){
+        long contador=0;
+        ContentValues usuario_ = new ContentValues();
+        usuario_.put("idUsuario",usuario.getIdUsuario());
+        usuario_.put("tipo",usuario.getTipo());
+        usuario_.put("contrasena",usuario.getContrasena());
+        usuario_.put("nombre",usuario.getNombre());
+        usuario_.put("correo",usuario.getCorreo());
+        contador=db.insert("usuario", null,usuario_);
+        if(contador==-1 || contador==0){return false;}
+        else{return true;}}
+
+    public Usuario consultarUsuario(int idUsuario){
+        String[] id = {String.valueOf(idUsuario)};
+        Cursor c = db.query("usuario", camposUsuario, "idUsuario = ?", id, null, null, null);
+
+        if(c.moveToFirst()){
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(c.getInt(0));
+            usuario.setTipo(c.getString(1));
+            usuario.setContrasena(c.getString(2));
+            usuario.setNombre(c.getString(3));
+            usuario.setCorreo(c.getString(4));
+            return usuario;}else{return null;}}
+
+    public boolean actualizar(Usuario usuario) {
+        if(verificarIntegridad(usuario, 8)){
+            String[] id = {String.valueOf(usuario.getIdUsuario())};
+            ContentValues cv = new ContentValues();
+            cv.put("tipo",usuario.getTipo());
+            cv.put("contrasena",usuario.getContrasena());
+            cv.put("nombre",usuario.getNombre());
+            cv.put("correo",usuario.getCorreo());
+            db.update("usuario", cv, "idUsuario = ?", id);
+            return true;}
+        else{return false;}}
+
+    public boolean eliminar(Usuario usuario) {
+        int contador=0;
+        contador+=db.delete("usuario", "idUsuario='"+usuario.getIdUsuario()+"'", null);//Implementar un trigger.
+        if(contador==0){return false;}
+        else{return true;}}
+
+    //Métodos para la tabla Permiso.
+
+    public boolean insertar(Permiso permiso){
+        long contador=0;
+        ContentValues permiso_ = new ContentValues();
+        permiso_.put("idPermiso",permiso.getIdPermiso());
+        permiso_.put("descripcion",permiso.getDescripcion());
+        contador=db.insert("permiso", null,permiso_);
+        if(contador==-1 || contador==0){return false;}
+        else{return true;}}
+
+    public Permiso consultarPermiso(int idPermiso){
+        String[] id = {String.valueOf(idPermiso)};
+        Cursor c = db.query("permiso", camposPermiso, "idPermiso = ?", id, null, null, null);
+
+        if(c.moveToFirst()){
+            Permiso permiso = new Permiso();
+            permiso.setIdPermiso(c.getInt(0));
+            permiso.setDescripcion(c.getString(1));
+            return permiso;}else{return null;}}
+
+    public boolean actualizar(Permiso permiso){
+        if(verificarIntegridad(permiso, 12)){
+            String[] id = {String.valueOf(permiso.getIdPermiso())};
+            ContentValues cv = new ContentValues();
+            cv.put("descripcion",permiso.getDescripcion());
+            db.update("permiso", cv, "idPermiso = ?", id);
+            return true;}
+        else{return false;}}
+
+    public boolean eliminar(Permiso permiso){
+        int contador=0;
+        contador+=db.delete("permiso", "idPermiso='"+permiso.getIdPermiso()+"'", null);//Implementar un trigger.
+        if(contador==0){return false;}
+        else{return true;}}
+
+    //Métodos para la tabla AccesoUsuario.
+
+    public boolean insertar(AccesoUsuario accesoUsuario){
+        if(verificarIntegridad(accesoUsuario, 10)){
+            long contador=0;
+            ContentValues accesoUsuario_ = new ContentValues();
+            accesoUsuario_.put("idAcceso",accesoUsuario.getIdAcceso());
+            accesoUsuario_.put("idUsuario",accesoUsuario.getIdUsuario());
+            accesoUsuario_.put("idPermiso",accesoUsuario.getIdPermiso());
+            contador=db.insert("AccesoUsuario", null,accesoUsuario_);
+            if(contador==-1 || contador==0){return false;}
+            else{return true;}}
+        else{return false;}}
+
+    public boolean eliminar(AccesoUsuario accesoUsuario) {
+        int contador=0;
+        contador+=db.delete("accesoUsuario", "idUsuario='"+accesoUsuario.getIdUsuario()+"' and idPermiso='"+accesoUsuario.getIdPermiso()+"'", null);
+        if(contador==0){return false;}
+        else{return true;}}
+
+    //Métodos para la tabla Emite.
+
+    public boolean insertar(Emite emite){
+        if(verificarIntegridad(emite, 13)){
+        long contador=0;
+        ContentValues emite_ = new ContentValues();
+        emite_.put("idPermiso",emite.getIdDocente());
+        emite_.put("idSolicitud",emite.getIdSolicitud());
+        contador=db.insert("emite", null,emite_);
+        if(contador==-1 || contador==0){return false;}
+        else{return true;}}
+        else{return false;}}
+
+    public boolean eliminar(Emite emite){
+        int contador=0;
+        contador+=db.delete("emite", "idDocente='"+emite.getIdDocente()+"' and idSolicitud='"+emite.getIdSolicitud()+"'", null);
+        if(contador==0){return false;}
+        else{return true;}}
+
+    //Métodos para la tabla Instructor_Emite.
+
+    public boolean insertar(Instructor_Emite instructor_Emite){
+        if(verificarIntegridad(instructor_Emite, 11)){
+            long contador=0;
+            ContentValues instructor_Emite_ = new ContentValues();
+            instructor_Emite_.put("carnet",instructor_Emite.getCarnet());
+            instructor_Emite_.put("idSolicitud",instructor_Emite.getIdSolicitud());
+            contador=db.insert("emite", null,instructor_Emite_);
+            if(contador==-1 || contador==0){return false;}
+            else{return true;}}
+        else{return false;}}
+
+    public boolean eliminar(Instructor_Emite instructor_Emite){
+        int contador=0;
+        contador+=db.delete("instructor_Emite", "carnet='"+instructor_Emite.getCarnet()+"' and idSolicitud='"+instructor_Emite.getIdSolicitud()+"'", null);
+        if(contador==0){return false;}
+        else{return true;}}
+
+    //Métodos para la tabla Posee.
+
+    public boolean insertar(Posee posee){
+        if(verificarIntegridad(posee, 9)){
+            long contador=0;
+            ContentValues posee_ = new ContentValues();
+            posee_.put("idPermiso",posee.getIdDocente());
+            posee_.put("idSolicitud",posee.getIdCargo());
+            contador=db.insert("emite", null,posee_);
+            if(contador==-1 || contador==0){return false;}
+            else{return true;}}
+        else{return false;}}
+
+    public boolean eliminar(Posee posee){
+        int contador=0;
+        contador+=db.delete("emite", "idDocente='"+posee.getIdDocente()+"' and idSolicitud='"+posee.getIdCargo()+"'", null);
+        if(contador==0){return false;}
+        else{return true;}}
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String BASE_DATOS = "db.s3db";
         private static final int VERSION = 1;
@@ -217,7 +379,7 @@ public class ControlBDGpo16 {
     private boolean verificarIntegridad(Object dato, int relacion) throws SQLException{
         switch(relacion){
 
-            //Verificación de integridad de CN18006 (del caso 1 al caso 7).
+            //Verificación de integridad de CN18006 (del caso 1 al caso 13).
             case 1:{
                 //Verificar que exista la reservación para poder actualizarla.
                 Reservacion reservacion = (Reservacion)dato;
@@ -235,7 +397,7 @@ public class ControlBDGpo16 {
                 abrir();
                 Cursor c = db.query("ciclo", null, "idCiclo = ?", id, null, null,null);
                 if(c.moveToFirst()){
-                    //Se encontró ciclo.
+                    //Se encontró el ciclo.
                     return true;}
                 return false;}
             case 3:{
@@ -268,7 +430,7 @@ public class ControlBDGpo16 {
                 abrir();
                 Cursor c = db.query("materia", null, "codMateria = ?", id, null, null,null);
                 if(c.moveToFirst()){
-                    //Se encontró ciclo.
+                    //Se encontró la materia.
                     return true;}
                 return false;}
             case 6:{
@@ -290,6 +452,74 @@ public class ControlBDGpo16 {
                 abrir();
                 Cursor c = db.query("escuela", null, "codEscuela = ?", id,null, null, null);
                 if(c.moveToFirst()){
+                    //Se encontraron datos.
+                    return true;}
+                return false;}
+            case 8:{
+                //Verificar que exista el usuario para poder actualizarlo.
+                Usuario usuario = (Usuario)dato;
+                String[] id = {String.valueOf(usuario.getIdUsuario())};
+                abrir();
+                Cursor c = db.query("usuario", null, "idUsuario = ?", id, null, null,null);
+                if(c.moveToFirst()){
+                    //Se encontró el usuario.
+                    return true;}
+                return false;}
+            case 9:{
+                //Verificar que al registrar una posesión de cargo para el docente, existan el docente y el cargo.
+                Posee posee = (Posee)dato;
+                String[] id1 = {String.valueOf(posee.getIdDocente())};
+                String[] id2 = {String.valueOf(posee.getIdCargo())};
+                abrir();
+                Cursor c1 = db.query("docente", null, "idDocente = ?", id1,null, null, null);
+                Cursor c2 = db.query("cargo", null, "idCargo = ?", id2, null,null, null);
+                if(c1.moveToFirst() && c2.moveToFirst()){
+                    //Se encontraron datos.
+                    return true;}
+                return false;}
+            case 10:{
+                //Verificar que al registrar un acceso de usuario, existan el usuario y el permiso.
+                AccesoUsuario accesoUsuario = (AccesoUsuario)dato;
+                String[] id1 = {String.valueOf(accesoUsuario.getIdUsuario())};
+                String[] id2 = {String.valueOf(accesoUsuario.getIdPermiso())};
+                abrir();
+                Cursor c1 = db.query("usuario", null, "idUsuario = ?", id1,null, null, null);
+                Cursor c2 = db.query("permiso", null, "idPermiso = ?", id2, null,null, null);
+                if(c1.moveToFirst() && c2.moveToFirst()){
+                    //Se encontraron datos.
+                    return true;}
+                return false;}
+            case 11:{
+                //Verificar que al registrar un acceso de usuario, existan el usuario y el permiso.
+                Instructor_Emite instructor_Emite = (Instructor_Emite)dato;
+                String[] id1 = {String.valueOf(instructor_Emite.getCarnet())};
+                String[] id2 = {String.valueOf(instructor_Emite.getIdSolicitud())};
+                abrir();
+                Cursor c1 = db.query("estudiante", null, "carnet = ?", id1,null, null, null);
+                Cursor c2 = db.query("solicitudDeImpresiones", null, "idSolicitud = ?", id2, null,null, null);
+                if(c1.moveToFirst() && c2.moveToFirst()){
+                    //Se encontraron datos.
+                    return true;}
+                return false;}
+            case 12:{
+                //Verificar que exista el usuario para poder actualizarlo.
+                Permiso permiso = (Permiso)dato;
+                String[] id = {String.valueOf(permiso.getIdPermiso())};
+                abrir();
+                Cursor c = db.query("permiso", null, "idPermiso = ?", id, null, null,null);
+                if(c.moveToFirst()){
+                    //Se encontró el usuario.
+                    return true;}
+                return false;}
+            case 13:{
+                //Verificar que al registrar un acceso de usuario, existan el usuario y el permiso.
+                Emite emite = (Emite)dato;
+                String[] id1 = {String.valueOf(emite.getIdDocente())};
+                String[] id2 = {String.valueOf(emite.getIdSolicitud())};
+                abrir();
+                Cursor c1 = db.query("docente", null, "idDocente = ?", id1,null, null, null);
+                Cursor c2 = db.query("solicitudDeImpresiones", null, "idSolicitud = ?", id2, null,null, null);
+                if(c1.moveToFirst() && c2.moveToFirst()){
                     //Se encontraron datos.
                     return true;}
                 return false;}
