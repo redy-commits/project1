@@ -14,8 +14,7 @@ public class ControlBDGpo16 {
     private static final String[] camposReservacion = new String [] {"idReservacion","idLocal","idDocente","horaInicio","fecha","horaFin"};
     private static final String[] camposCiclo= new String [] {"idCiclo","anio","numCiclo"};
     private static final String[] camposMateria= new String [] {"codMateria","codEscuela","nombre"};
-    private static final String[] camposUsuario= new String [] {"idUsuario","tipo","contrasena","nombre","correo"};
-    private static final String[] camposAccesoUsuario= new String [] {"idAcceso","idUsuario","idPermiso"};
+    private static final String[] camposUsuario= new String [] {"idUsuario","tipo","contrasena","nombre","correo","sesion"};
     private static final String[] camposPermiso= new String [] {"idPermiso","descripcion"};
     private DatabaseHelper DBHelper;
     private final Context context;
@@ -176,6 +175,20 @@ public class ControlBDGpo16 {
 
     //Métodos para la tabla Usuario.
 
+    public Usuario consultarSesion() {
+        String[] id = {String.valueOf(1)};
+        Cursor c = db.query("usuario", camposUsuario, "sesion = ?", id, null, null, null);
+
+        if(c.moveToFirst()){
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(c.getInt(0));
+            usuario.setTipo(c.getString(1));
+            usuario.setContrasena(c.getString(2));
+            usuario.setNombre(c.getString(3));
+            usuario.setCorreo(c.getString(4));
+            usuario.setSesion(Boolean.valueOf(c.getString(5)));
+            return usuario;}else{return null;}}
+
     public boolean insertar(Usuario usuario){
         long contador=0;
         ContentValues usuario_ = new ContentValues();
@@ -184,6 +197,7 @@ public class ControlBDGpo16 {
         usuario_.put("contrasena",usuario.getContrasena());
         usuario_.put("nombre",usuario.getNombre());
         usuario_.put("correo",usuario.getCorreo());
+        usuario_.put("sesion",usuario.isSesion());
         contador=db.insert("usuario", null,usuario_);
         if(contador==-1 || contador==0){return false;}
         else{return true;}}
@@ -199,6 +213,7 @@ public class ControlBDGpo16 {
             usuario.setContrasena(c.getString(2));
             usuario.setNombre(c.getString(3));
             usuario.setCorreo(c.getString(4));
+            usuario.setSesion(Boolean.valueOf(c.getString(5)));
             return usuario;}else{return null;}}
 
     public boolean actualizar(Usuario usuario) {
@@ -209,6 +224,7 @@ public class ControlBDGpo16 {
             cv.put("contrasena",usuario.getContrasena());
             cv.put("nombre",usuario.getNombre());
             cv.put("correo",usuario.getCorreo());
+            cv.put("sesion", usuario.isSesion());
             db.update("usuario", cv, "idUsuario = ?", id);
             return true;}
         else{return false;}}
@@ -348,7 +364,7 @@ public class ControlBDGpo16 {
                 db.execSQL("CREATE TABLE cargo(idCargo INTEGER NOT NULL PRIMARY KEY,nombreCargo VARCHAR(30));");
                 db.execSQL("CREATE TABLE local(idLocal INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(10));");
                 db.execSQL("CREATE TABLE docente(idDocente INTEGER NOT NULL PRIMARY KEY,idUsuario integer);");
-                db.execSQL("CREATE TABLE usuario(idUsuario INTEGER NOT NULL PRIMARY KEY,tipo VARCHAR(10),contrasena VARCHAR(30),nombre VARCHAR(75),correo VARCHAR(75));");
+                db.execSQL("CREATE TABLE usuario(idUsuario INTEGER NOT NULL PRIMARY KEY,tipo VARCHAR(10),contrasena VARCHAR(30),nombre VARCHAR(75),correo VARCHAR(75),sesion boolean);");
                 db.execSQL("CREATE TABLE accesoUsuario(idAcceso integer not null primary key,idUsuario integer,idPermiso integer);");
                 db.execSQL("CREATE TABLE encargadoDeImpresiones(idEncargado INTEGER NOT NULL PRIMARY KEY);");
                 db.execSQL("CREATE TABLE matricula(idMatricula INTEGER NOT NULL PRIMARY KEY,carnet varchar(7),codMateria varchar(6),idCiclo integer,numMatricula integer);");
@@ -363,6 +379,7 @@ public class ControlBDGpo16 {
                 db.execSQL("CREATE TABLE instructor_emite(carnet varchar(7) NOT NULL,idSolicitud integer not null,constraint PK_INSTRUCTOR_EMITE primary key (carnet,idSolicitud));");
                 db.execSQL("CREATE TABLE posee(idDocente INTEGER NOT NULL,idCargo integer NOT NULL,constraint PK_POSEE primary key (idDocente,idCargo));");
                 db.execSQL("CREATE TABLE emite(idDocente INTEGER NOT NULL,idSolicitud NOT NULL,constraint PK_EMITE primary key (idDocente,idSolicitud));");
+                db.execSQL("insert into usuario values (1,'docente','1234','Rodolfo Zelaya','zelaya@gmail.com',0);");
             }catch(SQLException e){e.printStackTrace();}}
 
         @Override

@@ -3,6 +3,11 @@ package com.controldeprocesos;
 public class Usuario{
     private int idUsuario;
     private String tipo,contrasena,nombre,correo;
+    private boolean sesion;
+
+    public boolean isSesion(){return sesion;}
+
+    public void setSesion(boolean sesion){this.sesion = sesion;}
 
     public Usuario(){}
 
