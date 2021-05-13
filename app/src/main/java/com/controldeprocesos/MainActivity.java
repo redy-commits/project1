@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class MainActivity extends ListActivity {
 
     String[] menu={"Tabla ExamenIndividual","Tabla Docente","Tabla EncargadoDeImpresiones","Tabla Cargo","Tabla Local","Tabla Matricula","Tabla Estudiante","Tabla SegundaRevision","Tabla Escuela","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Revision","Tabla Reservacion","Tabla Materia","Tabla Ciclo","Cerrar sesión","LLenar base de datos"};
-    String[] activities={"ExamenIndividualMenuActivity","DocenteMenuActivity","EncargadoDeImpresionesMenuActivity","CargoMenuActivity","LocalMenuActivity","CargoMenuMatricula","EstudianteMenuActivity","SegundaRevisionMenuActivity","EscuelaMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","RevisionMenuActivity","ReservacionMenuActivity","MateriaMenuActivity","CicloMenuActivity","Login"};
+    String[] activities={"ExamenIndividualMenuActivity","DocenteMenuActivity","EncargadoDeImpresionesMenuActivity","CargoMenuActivity","LocalMenuActivity","MatriculaMenuActivity","EstudianteMenuActivity","SegundaRevisionMenuActivity","EscuelaMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","RevisionMenuActivity","ReservacionMenuActivity","MateriaMenuActivity","CicloMenuActivity","MainActivity"};
     ControlBDGpo16 helper;
     Usuario usuario;
 
@@ -41,7 +41,7 @@ public class MainActivity extends ListActivity {
         if(position!=16){
             String nombreValue=activities[position];
 
-            if(nombreValue=="Login"){
+            if(nombreValue=="MainActivity"){
                 usuario.setSesion(false);
                 helper.abrir();
                 helper.actualizar(usuario);
@@ -50,6 +50,7 @@ public class MainActivity extends ListActivity {
             try{
                 Class<?> clase=Class.forName("com.controldeprocesos."+nombreValue);
                 Intent inte = new Intent(this,clase);
+                if(nombreValue=="MainActivity")finish();
                 this.startActivity(inte);
             }catch(ClassNotFoundException e){e.printStackTrace();}
 

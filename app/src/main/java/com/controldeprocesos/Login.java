@@ -30,6 +30,7 @@ public class Login extends AppCompatActivity {
         Usuario usuario = helper.consultarUsuario(Integer.parseInt(edtUsuario.getText().toString()));
         helper.cerrar();
 
+        try{
         if(String.valueOf(usuario.getIdUsuario()).equals(edtUsuario.getText().toString())){
             if(usuario.getContrasena().toString().equals(edtContrasena.getText().toString())){
                 usuario.setSesion(true);
@@ -39,5 +40,5 @@ public class Login extends AppCompatActivity {
                 Intent intent = new Intent(Login.this,MainActivity.class);
                 finish();
                 startActivity(intent);}
-            else{Toast.makeText(getApplicationContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();}}
-        else{Toast.makeText(getApplicationContext(), "Usuario incorrecto", Toast.LENGTH_SHORT).show();}}}
+            else{Toast.makeText(getApplicationContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();}}}
+        catch(Exception e){Toast.makeText(getApplicationContext(), "Usuario incorrecto", Toast.LENGTH_SHORT).show();}}}

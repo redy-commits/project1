@@ -16,6 +16,7 @@ public class ControlBDGpo16 {
     private static final String[] camposMateria= new String [] {"codMateria","codEscuela","nombre"};
     private static final String[] camposUsuario= new String [] {"idUsuario","tipo","contrasena","nombre","correo","sesion"};
     private static final String[] camposPermiso= new String [] {"idPermiso","descripcion"};
+    private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -365,20 +366,29 @@ public class ControlBDGpo16 {
                 db.execSQL("CREATE TABLE local(idLocal INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(10));");
                 db.execSQL("CREATE TABLE docente(idDocente INTEGER NOT NULL PRIMARY KEY,idUsuario integer);");
                 db.execSQL("CREATE TABLE usuario(idUsuario INTEGER NOT NULL PRIMARY KEY,tipo VARCHAR(10),contrasena VARCHAR(30),nombre VARCHAR(75),correo VARCHAR(75),sesion boolean);");
-                db.execSQL("CREATE TABLE accesoUsuario(idAcceso integer not null primary key,idUsuario integer,idPermiso integer);");
-                db.execSQL("CREATE TABLE encargadoDeImpresiones(idEncargado INTEGER NOT NULL PRIMARY KEY);");
+                db.execSQL("CREATE TABLE encargadoDeImpresiones(idEncargado INTEGER NOT NULL PRIMARY KEY,idUsuario integer);");
+                db.execSQL("CREATE TABLE administrador(idAdministrador INTEGER NOT NULL PRIMARY KEY,idUsuario integer);");
                 db.execSQL("CREATE TABLE matricula(idMatricula INTEGER NOT NULL PRIMARY KEY,carnet varchar(7),codMateria varchar(6),idCiclo integer,numMatricula integer);");
-                db.execSQL("CREATE TABLE segundaRevision(numRev2 INTEGER NOT NULL PRIMARY KEY,idExamen integer,respSociedadEstud varchar(7),idDocente integer,idOtroDocente integer,notaDefinitica float);");
-                db.execSQL("CREATE TABLE revision(numRev1 INTEGER NOT NULL PRIMARY KEY,nuevaNota float,observ text,asistio boolean,idExamen integer);");
+                db.execSQL("CREATE TABLE segundaRevision(numRev2 INTEGER NOT NULL PRIMARY KEY,idExamen integer,respSociedadEstud varchar(7),idDocente integer,idOtroDocente integer,notaDefinitiva float);");
+                db.execSQL("CREATE TABLE revision(numRev1 INTEGER NOT NULL PRIMARY KEY,idExamen integer,nuevaNota float,observ text,asistio boolean);");
+                db.execSQL("create table solicitudDeCambio(idSolicitudCambio integer not null primary key,idExamen integer,idRazon integer,nuevaNota float,estadoAprobado boolean);");
+                db.execSQL("create table solicitudDeDiferido(idSolicitudDiferido integer not null primary key,idExamen integer,estadoAprobado boolean);");
+                db.execSQL("create table solicitudDeRevision(idSolicitudRevision integer not null primary key,numRev integer,idRevision integer);");
                 db.execSQL("CREATE TABLE evaluacion(numEva INTEGER NOT NULL PRIMARY KEY,idDocente integer,codMateria varchar(6),tipo VARCHAR(10),alumnosEvaluados integer,fechaRealización date,fechaPublicacion date);");
                 db.execSQL("CREATE TABLE examenIndividual(idExamen INTEGER NOT NULL PRIMARY KEY,numEva integer,carnet integer,nota float);");
+                db.execSQL("create table instructor(idInstructor integer not null primary key,idRazon integer);");
                 db.execSQL("CREATE TABLE escuela(codEscuela INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(75));");
-                db.execSQL("CREATE TABLE estudiante(carnet varchar(7) NOT NULL PRIMARY KEY);");
+                db.execSQL("CREATE TABLE estudiante(carnet varchar(7) NOT NULL PRIMARY KEY,idUsuario integer);");
                 db.execSQL("CREATE TABLE permiso(idPermiso INTEGER NOT NULL PRIMARY KEY,descipcionP text);");
                 db.execSQL("CREATE TABLE catedra(idCatedra INTEGER NOT NULL primary key,idCiclo,codMateria varchar(6),idDocente INTEGER);");
-                db.execSQL("CREATE TABLE instructor_emite(carnet varchar(7) NOT NULL,idSolicitud integer not null,constraint PK_INSTRUCTOR_EMITE primary key (carnet,idSolicitud));");
+                db.execSQL("create table razon(idRazon integer not null primary key,nombre varchar(75),descripcion text);");
                 db.execSQL("CREATE TABLE posee(idDocente INTEGER NOT NULL,idCargo integer NOT NULL,constraint PK_POSEE primary key (idDocente,idCargo));");
                 db.execSQL("CREATE TABLE emite(idDocente INTEGER NOT NULL,idSolicitud NOT NULL,constraint PK_EMITE primary key (idDocente,idSolicitud));");
+                db.execSQL("CREATE TABLE recibe(idDocente INTEGER NOT NULL,idSolicitudRevision NOT NULL,constraint PK_RECIBE primary key (idDocente,idSolicitudRevision));");
+                db.execSQL("CREATE TABLE emite_2(idInstructor INTEGER NOT NULL,idSolicitud NOT NULL,constraint PK_EMITE_2 primary key (idInstructor,idSolicitud));");
+                db.execSQL("CREATE TABLE accesoUsuario(idUsuario integer not null,idPermiso integer not null,constraint PK_ACCESOUSUARIO primary key (idPermiso, idUsuario));");
+                db.execSQL("CREATE TABLE admite_2(idAdministrador INTEGER NOT NULL,idSolicitudCambio integer not null,constraint PK_ADMITE_2 primary key (idAdministrador,idSolicitudCambio));");
+                db.execSQL("CREATE TABLE es_admitida_por(idSolicitudDiferido INTEGER NOT NULL,idAdministrador integer not null,constraint PK_ES_ADMITIDA_POR primary key (idSolicitudDiferido,idAdministrador));");
                 db.execSQL("insert into usuario values (1,'docente','1234','Rodolfo Zelaya','zelaya@gmail.com',0);");
             }catch(SQLException e){e.printStackTrace();}}
 
@@ -546,4 +556,50 @@ public class ControlBDGpo16 {
     public String LlenarBDGpo16(){
         abrir();
         cerrar();
-        return "Guardó correctamente";}}
+        return "Guardó correctamente";}
+    public  String actualizarMatr(Matricula matricula) {
+        if(verificarIntegridad(matricula, 1)){
+            String[] id = {String.valueOf(matricula.getIdMatricula())};
+            ContentValues cv = new ContentValues();
+            cv.put("idMatricula",matricula.getIdMatricula());
+            cv.put("carnet",matricula.getCarnet());
+            cv.put("codMateria",matricula.getCodMateria());
+            cv.put("idCiclo",matricula.getIdCiclo());
+            cv.put("numMatricula",matricula.getNumMatricula());
+            db.update("matricula", cv, "idMatricula = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "La matricula "+matricula.getIdMatricula()+" no existe";}}
+    public String insertarMatr(Matricula matricula){
+        String regInsertados="¡Matricula registrada!";
+        long contador=0;
+        ContentValues matricula_ = new ContentValues();
+        matricula_.put("idMatricula",matricula.getIdMatricula());
+        matricula_.put("carnet",matricula.getCarnet());
+        matricula_.put("codMateria",matricula.getCodMateria());
+        matricula_.put("idCiclo",matricula.getIdCiclo());
+        matricula_.put("numMatricula",matricula.getNumMatricula());
+        contador=db.insert("matricula", null, matricula_);
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+    public String eliminarMatr(Matricula matricula) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("matricula", "idMatricula='"+matricula.getIdMatricula()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+
+
+    public Matricula consultarMatricula(String idMatricula){
+        String[] id = {String.valueOf(idMatricula)};
+        Cursor cursor = db.query("matricula", camposMatricula, "idMatricula = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            Matricula matricula = new Matricula();
+            matricula.setIdMatricula(cursor.getInt(0));
+            matricula.setCarnet(cursor.getString(1));
+            matricula.setCodMateria(cursor.getString(2));
+            matricula.setIdCiclo(cursor.getInt(3));
+            matricula.setNumMatricula(cursor.getInt(4));
+            return matricula;}else{return null;}}}
