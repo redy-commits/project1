@@ -16,6 +16,7 @@ public class ControlBDGpo16 {
     private static final String[] camposMateria= new String [] {"codMateria","codEscuela","nombre"};
     private static final String[] camposUsuario= new String [] {"idUsuario","tipo","contrasena","nombre","correo","sesion"};
     private static final String[] camposPermiso= new String [] {"idPermiso","descripcion"};
+    private static final String[] camposEscuela= new String [] {"codEscuela","nombre"};
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private DatabaseHelper DBHelper;
     private final Context context;
@@ -25,8 +26,51 @@ public class ControlBDGpo16 {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);}
 
-        //Métodos para la tabla Reservación.
+//Metodo insertar Escuela
+    public String insertar(Escuela escuela){
+        String regInsertados="Registro Insertado Nº= ";
+        long contador=0;
+        ContentValues escu = new ContentValues();
+        escu.put("codEscuela", escuela.getcodEscuela());
+        escu.put("nombre", escuela.getNombre());
+        contador=db.insert("escuela", null, escu);
+        if(contador==-1 || contador==0)
+        {
+            regInsertados= "Error al Insertar el registro, Registro  Duplicado. Verificar inserción";
+        }
+        else {
+            regInsertados=regInsertados+contador;
+        }
+        return regInsertados;
+    }
+    //Metodo eliminar Escuela
+    public String eliminar(Escuela escuela){
+        String regAfectados="filas afectadas= ";
+        int contador=0;
+        //Integridad
+      //  if (verificarIntegridad(escuela,3)) {
+         //   contador+=db.delete("escuela", "codEscuela='"+escuela.getcodEscuela()+"'", null);
+       // }
+        contador+=db.delete("escuela", "codEscuela='"+escuela.getcodEscuela()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;
+    }
 
+    //Metodo consultar Escuela
+    public Escuela consultarEscuela(String codEscuela) {
+            String[] id = {codEscuela};
+            Cursor cursor = db.query("escuela", camposEscuela, "codEscuela = ?",  id, null, null, null);
+            if(cursor.moveToFirst()){
+                Escuela escuela = new Escuela();
+                escuela.setcodEscuela(cursor.getString(0));
+                escuela.setNombre(cursor.getString(1));
+                return escuela;
+            }else{
+                return null;
+            }
+        }
+
+        //Métodos para la tabla Reservación
     public String insertar(Reservacion reservacion){
         String regInsertados="¡Reservación registrada!";
         if(verificarIntegridad(reservacion, 4)){
@@ -348,6 +392,8 @@ public class ControlBDGpo16 {
         contador+=db.delete("emite", "idDocente='"+posee.getIdDocente()+"' and idSolicitud='"+posee.getIdCargo()+"'", null);
         if(contador==0){return false;}
         else{return true;}}
+
+
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String BASE_DATOS = "db.s3db";

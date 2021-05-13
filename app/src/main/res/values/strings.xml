@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Control de procesos administrativos</string>
+    <string name="codEscuela">codEscuela</string>
+    <string name="nombre">nombre</string>
+    <string name="opciones">opciones</string>
+    <string name="insertar">insertar</string>
+    <string name="limpiar">limpiar</string>
+    <string name="consultar">consultar</string>
+    <string name="eliminar">eliminar</string>
 </resources>
