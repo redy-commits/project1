@@ -546,4 +546,50 @@ public class ControlBDGpo16 {
     public String LlenarBDGpo16(){
         abrir();
         cerrar();
-        return "Guardó correctamente";}}
+        return "Guardó correctamente";}
+    public  String actualizarMatr(Matricula matricula) {
+        if(verificarIntegridad(matricula, 1)){
+            String[] id = {String.valueOf(matricula.getIdMatricula())};
+            ContentValues cv = new ContentValues();
+            cv.put("idMatricula",matricula.getIdMatricula());
+            cv.put("carnet",matricula.getCarnet());
+            cv.put("codMateria",matricula.getCodMateria());
+            cv.put("idCiclo",matricula.getIdCiclo());
+            cv.put("numMatricula",matricula.getNumMatricula());
+            db.update("matricula", cv, "idMatricula = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "La matricula "+matricula.getIdMatricula()+" no existe";}}
+    public String insertarMatr(Matricula matricula){
+        String regInsertados="¡Matricula registrada!";
+        long contador=0;
+        ContentValues matricula_ = new ContentValues();
+        matricula_.put("idMatricula",matricula.getIdMatricula());
+        matricula_.put("carnet",matricula.getCarnet());
+        matricula_.put("codMateria",matricula.getCodMateria());
+        matricula_.put("idCiclo",matricula.getIdCiclo());
+        matricula_.put("numMatricula",matricula.getNumMatricula());
+        contador=db.insert("matricula", null, matricula_);
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+    public String eliminarMatr(Matricula matricula) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("matricula", "idMatricula='"+matricula.getIdMatricula()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+
+    public Matricula consultarMatricula(String idMatricula){
+        String[] id = {String.valueOf(idMatricula)};
+        Cursor cursor = db.query("matricula", camposMatricula, "idMatricula = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            Matricula matricula = new Matricula();
+            matricula.setIdMatricula(cursor.getInt(0));
+            matricula.setCarnet(cursor.getString(1));
+            matricula.setCodMateria(cursor.getString(2));
+            matricula.setIdCiclo(cursor.getInt(3));
+            matricula.setNumMatricula(cursor.getInt(4));
+            return matricula;}else{return null;}}
+}
