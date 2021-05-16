@@ -23,9 +23,8 @@ public class EscuelaInsertarActivity extends Activity {
         editNombre = (EditText) findViewById(R.id.editNombre);
     }
     public void insertarEscuela(View v) {
-        String coEscuela=editcodEscuela.getText().toString();
+        int coEscuela= Integer.parseInt(editcodEscuela.getText().toString());
         String nombre=editNombre.getText().toString();
-
         String regInsertados;
         Escuela escuela=new Escuela();
         escuela.setcodEscuela(coEscuela);

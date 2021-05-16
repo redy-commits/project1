@@ -5,28 +5,46 @@ public class Usuario{
     private String tipo,contrasena,nombre,correo;
     private boolean sesion;
 
-    public boolean isSesion(){return sesion;}
-
-    public void setSesion(boolean sesion){this.sesion = sesion;}
+    public boolean isSesion()
+    {return sesion;}
+    public Usuario(String nombre, String contrasena, String tipo, boolean sesion, String correo){
+        this.correo=correo;
+        this.nombre = nombre;
+        this.contrasena=contrasena;
+        this.tipo=tipo;
+        this.sesion=sesion;
+    }
+    public void setSesion(boolean sesion)
+    {this.sesion = sesion;}
 
     public Usuario(){}
 
-    public int getIdUsuario(){return idUsuario;}
+    public int getIdUsuario()
+    {return idUsuario;}
 
-    public void setIdUsuario(int idUsuario){this.idUsuario = idUsuario;}
+    public void setIdUsuario(int idUsuario)
+    {this.idUsuario = idUsuario;}
 
-    public String getTipo(){return tipo;}
+    public String getTipo()
+    {return tipo;}
 
-    public void setTipo(String tipo){this.tipo = tipo;}
+    public void setTipo(String tipo)
+    {this.tipo = tipo;}
 
-    public String getContrasena(){return contrasena;}
+    public String getContrasena()
+    {return contrasena;}
 
-    public void setContrasena(String contrasena){this.contrasena = contrasena;}
+    public void setContrasena(String contrasena)
+    {this.contrasena = contrasena;}
 
-    public String getNombre(){return nombre;}
+    public String getNombre()
+    {return nombre;}
 
-    public void setNombre(String nombre){this.nombre = nombre;}
+    public void setNombre(String nombre)
+    {this.nombre = nombre;}
 
-    public String getCorreo(){return correo;}
+    public String getCorreo()
+    {return correo;}
 
-    public void setCorreo(String correo){this.correo = correo;}}
+    public void setCorreo(String correo)
+    {this.correo = correo;}}

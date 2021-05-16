@@ -15,8 +15,7 @@ public class EscuelaMenuActivity extends ListActivity {
     String[] menu={"Insertar Registro","Eliminar Registro","Consultar Registro",
             "Actualizar Registro"};
     String[]
-            activities={"EscuelaInsertarActivity","EscuelaBorrarActivity","EscuelaConsultarActivity",
-            "EscuelaActualizarActivity"};
+            activities={"EscuelaInsertarActivity","EscuelaBorrarActivity","EscuelaConsultarActivity","EscuelaActualizarActivity"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

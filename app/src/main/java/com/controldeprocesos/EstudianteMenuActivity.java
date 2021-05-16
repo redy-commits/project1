@@ -13,7 +13,7 @@ public class EstudianteMenuActivity extends ListActivity {
     String[] menu={"Insertar Registro","Eliminar Registro","Consultar Registro",
             "Actualizar Registro"};
     String[]
-            activities={"EstudianteInsertarActivity","EstudianteEliminarActivity","EstudianteConsultarActivity",
+            activities={"EstudianteInsertarActivity","EstudianteBorrarActivity","EstudianteConsultarActivity",
             "EstudianteActualizarActivity"};
 
     @Override

@@ -7,4 +7,11 @@
     <string name="limpiar">limpiar</string>
     <string name="consultar">consultar</string>
     <string name="eliminar">eliminar</string>
+    <string name="carnet">carnet</string>
+    <string name="correo">correo</string>
+    <string name="tipo">tipo</string>
+    <string name="sesion">sesion</string>
+    <string name="contrasena">contrasena</string>
+    <string name="idUsuario">idUsuario</string>
+    <string name="actualizar">actualizar</string>
 </resources>

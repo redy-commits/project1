@@ -19,7 +19,7 @@ public class EscuelaBorrarActivity extends Activity {
     public void eliminarEscuela(View v){
         String regEliminadas;
         Escuela escuela =new Escuela();
-        escuela.setcodEscuela(editcodEscuela.getText().toString());
+        escuela.setcodEscuela(Integer.parseInt(editcodEscuela.getText().toString()));
         controlhelper.abrir();
         regEliminadas=controlhelper.eliminar(escuela);
         controlhelper.cerrar();

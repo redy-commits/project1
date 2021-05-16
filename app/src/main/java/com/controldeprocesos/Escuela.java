@@ -1,20 +1,20 @@
 package com.controldeprocesos;
 
 public class Escuela {
-    private String codEscuela;
+    private int codEscuela;
     private String nombre;
 
 
 public Escuela(){
 }
- public Escuela(String codEscuela, String nombre){
+ public Escuela(int codEscuela, String nombre){
     this.codEscuela=codEscuela;
     this.nombre=nombre;
  }
- public String getcodEscuela(){
+ public int getcodEscuela(){
     return codEscuela;
  }
- public void setcodEscuela(String codEscuela){
+ public void setcodEscuela(int codEscuela){
     this.codEscuela=codEscuela;
  }
  public String getNombre(){
