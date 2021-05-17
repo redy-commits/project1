@@ -691,6 +691,20 @@ public class ControlBDGpo16 {
             usuario.setSesion(Boolean.valueOf(c.getString(5)));
             return usuario;}else{return null;}}
 
+    public Usuario consultarUsuario(String correo){
+        String[] id = {correo};
+        Cursor c = db.query("usuario", camposUsuario, "correo = ?", id, null, null, null);
+
+        if(c.moveToFirst()){
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(c.getInt(0));
+            usuario.setTipo(c.getString(1));
+            usuario.setContrasena(c.getString(2));
+            usuario.setNombre(c.getString(3));
+            usuario.setCorreo(c.getString(4));
+            usuario.setSesion(Boolean.valueOf(c.getString(5)));
+            return usuario;}else{return null;}}
+
     public boolean actualizar(Usuario usuario) {
         if(verificarIntegridad(usuario, 8)){
             String[] id = {String.valueOf(usuario.getIdUsuario())};
@@ -1037,7 +1051,7 @@ public class ControlBDGpo16 {
                 db.execSQL("insert into usuario values (3,'admin','3456','Verónica Rocío Almogabar Santos','veronica.almogabar@gmail.com',0);");
                 db.execSQL("insert into administrador values (1,3);");
                 db.execSQL("insert into usuario values (4,'estudiante','4567','Daniela Katherinne Suarique Ávila','daniela.suarique@gmail.com',0);");
-                db.execSQL("insert into docente values ('SA18043',4);");
+                db.execSQL("insert into estudiante values ('SA18043',4);");
                 db.execSQL("insert into usuario values (5,'instructor','5678','Oscar Ricardo Ovalle Solano','oscar.ovalle@gmail.com',0);");
                 db.execSQL("insert into instructor values (1,5);");
                 db.execSQL("insert into usuario values (6,'encargado','6789','Jorge Esteban Coral Burbano','jorge.coral@gmail.com',0);");
@@ -1222,7 +1236,7 @@ public class ControlBDGpo16 {
                     return true;}
                 return false;}
             case 15:{
-                //Verificar que exista la escuela para poder actualizarlo.
+                //Verificar que exista la escuela para poder actualizarla.
                 Escuela escuela = (Escuela) dato;
                 String[] id = {String.valueOf(escuela.getcodEscuela())};
                 abrir();

@@ -31,5 +31,5 @@ public class CicloConsultarActivity extends Activity {
             if(ciclo == null)
                 Toast.makeText(this, "El ciclo "+edtIdCiclo.getText().toString()+ " no ha sido encontrado", Toast.LENGTH_LONG).show();
             else{
-                txtAnio.setText("Año: "+ciclo.getAnio());
-                txtNumCiclo.setText("Número de ciclo: "+ciclo.getNumCiclo());}}}
+                txtAnio.setText(txtAnio.getText()+": "+ciclo.getAnio());
+                txtNumCiclo.setText(txtNumCiclo.getText()+": "+ciclo.getNumCiclo());}}}

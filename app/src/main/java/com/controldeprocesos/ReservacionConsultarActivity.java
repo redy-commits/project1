@@ -37,8 +37,8 @@ public class ReservacionConsultarActivity extends Activity {
         if(reservacion == null)
             Toast.makeText(this, "La reservación " +edtIdReservacion.getText().toString()+ " no ha sido encontrada", Toast.LENGTH_LONG).show();
         else{
-            txtIdDocente.setText("Docente: "+reservacion.getIdDocente());
-            txtIdLocal.setText("Local: "+reservacion.getIdLocal());
-            txtHoraFin.setText("Hora de fin: "+reservacion.getHoraFin());
-            txtHoraInicio.setText("Hora de inicio: "+reservacion.getHoraInicio());
-            txtFecha.setText("Fecha: "+reservacion.getFecha());}}}
+            txtIdDocente.setText(txtIdDocente.getText()+": "+reservacion.getIdDocente());
+            txtIdLocal.setText(txtIdLocal.getText()+": "+reservacion.getIdLocal());
+            txtHoraFin.setText(txtHoraFin.getText()+": "+reservacion.getHoraFin());
+            txtHoraInicio.setText(txtHoraInicio.getText()+": "+reservacion.getHoraInicio());
+            txtFecha.setText(txtFecha.getText()+": "+reservacion.getFecha());}}}

@@ -22,23 +22,20 @@ public class Login extends AppCompatActivity {
         edtContrasena=(EditText)findViewById(R.id.edtContrasena);}
 
     public void acceder(View view) {
-        //Estudiante estudiante=new Estudiante();
-        //Docente docente=new Docente();
-        //EncargadoDeImpresiones encargadoDeImpresiones=new EncargadoDeImpresiones();
-
         helper.abrir();
-        Usuario usuario = helper.consultarUsuario(Integer.parseInt(edtUsuario.getText().toString()));
-        helper.cerrar();
+        Usuario usuario = helper.consultarUsuario(edtUsuario.getText().toString());
 
-        try{
-        if(String.valueOf(usuario.getIdUsuario()).equals(edtUsuario.getText().toString())){
-            if(usuario.getContrasena().toString().equals(edtContrasena.getText().toString())){
-                usuario.setSesion(true);
-                helper.abrir();
-                helper.actualizar(usuario);
-                helper.cerrar();
-                Intent intent = new Intent(Login.this,MainActivity.class);
-                finish();
-                startActivity(intent);}
-            else{Toast.makeText(getApplicationContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();}}}
-        catch(Exception e){Toast.makeText(getApplicationContext(), "Usuario incorrecto", Toast.LENGTH_SHORT).show();}}}
+        if(usuario==null){
+            Estudiante estudiante = helper.consultarEstudiante(edtUsuario.getText().toString());
+            if(estudiante!=null){usuario=helper.consultarUsuario(estudiante.getIdUsuario());}}
+
+            if(usuario!=null){
+                if(usuario.getContrasena().toString().equals(edtContrasena.getText().toString())){
+                    usuario.setSesion(true);
+                    helper.actualizar(usuario);
+                    Intent intent = new Intent(Login.this,MainActivity.class);
+                    finish();
+                    startActivity(intent);}
+                else{Toast.makeText(getApplicationContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();}}
+        else{Toast.makeText(getApplicationContext(), "Usuario incorrecto", Toast.LENGTH_SHORT).show();}
+        helper.cerrar();}}

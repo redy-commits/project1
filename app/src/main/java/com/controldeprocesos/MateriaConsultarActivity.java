@@ -32,5 +32,5 @@ public class MateriaConsultarActivity extends AppCompatActivity {
         if(materia == null)
             Toast.makeText(this, "La materia "+edtCodMateria.getText().toString()+ " no ha sido encontrada", Toast.LENGTH_LONG).show();
         else{
-            txtCodEscuela.setText("Código de escuela: "+materia.getCodEscuela());
-            txtNombre.setText("Nombre: "+materia.getNombre());}}}
+            txtCodEscuela.setText(txtCodEscuela.getText()+": "+materia.getCodEscuela());
+            txtNombre.setText(txtNombre.getText()+": "+materia.getNombre());}}}
