@@ -14,4 +14,7 @@
     <string name="contrasena">contrasena</string>
     <string name="idUsuario">idUsuario</string>
     <string name="actualizar">actualizar</string>
+    <string name="idDocente">idDocente</string>
+    <string name="id">id</string>
+    <string name="idEncargado">idEncargado</string>
 </resources>

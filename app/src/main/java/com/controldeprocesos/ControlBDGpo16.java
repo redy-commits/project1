@@ -19,6 +19,8 @@ public class ControlBDGpo16 {
     private static final String[] camposPermiso= new String [] {"idPermiso","descripcion"};
     private static final String[] camposEscuela= new String [] {"codEscuela","nombre"};
     private static final String[] camposEstudiante= new String [] {"carnet","idUsuario"};
+    private static final String[] camposDocente= new String [] {"idDocente","idUsuario"};
+    private static final String[] camposEncargado= new String [] {"idEncargado","idUsuario"};
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private DatabaseHelper DBHelper;
     private final Context context;
@@ -123,6 +125,200 @@ public class ControlBDGpo16 {
             estudiante.setCarnet(cursor.getString(0));
             estudiante.setIdUsuario(cursor.getInt(1));
             return estudiante;
+        }else{
+            return null;
+        }
+    }
+    //Insertar Encargado de Impresiones
+    public String insertarEncargado(Usuario user){
+        String regInsertados="Usuario Agregado con exito ";
+        long contador;
+        ContentValues doc = new ContentValues();
+        doc.put("correo",user.getCorreo());
+        doc.put("nombre",user.getNombre());
+        doc.put("contrasena",user.getContrasena());
+        doc.put("tipo",user.getTipo());
+        doc.put("sesion",user.isSesion());
+
+        contador=db.insert("usuario", null, doc);
+        if(contador==-1 || contador==0)
+        {
+            regInsertados= "Error al Insertar el registro, Registro Duplicado. Verificar inserción";
+        }
+
+        else {
+            regInsertados=regInsertados+contador;
+        }
+        String regInsertado="Encargado Agregado con exito ";
+        long contado;
+        ContentValues encargado = new ContentValues();
+        String[] id = {user.getCorreo()};
+        @SuppressLint("Recycle") Cursor cursor = db.query("usuario", camposUsuario, "correo = ?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            Usuario usua = new Usuario();
+            usua.setIdUsuario(Integer.parseInt(cursor.getString(0)));
+            encargado.put("idUsuario",usua.getIdUsuario());
+            contado=db.insert("encargadoDeImpresiones", null, encargado);
+            if(contado==-1 || contado==0)
+            {
+                regInsertado= "Error al Insertar el registro, Registro Duplicado. Verificar inserción";
+            }
+        }
+        else
+        {
+            regInsertado="  Error al ingresar al docente";
+        }
+        return regInsertados+regInsertado;
+    }
+    //Consultar Encargado de impresiones
+    public EncargadoDeImpresiones consultarEncargado(String idEncargadoDeImpresiones) {
+        String[] id = {idEncargadoDeImpresiones};
+        Cursor cursor = db.query("encargadoDeImpresiones", camposEncargado, "idEncargado = ?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            EncargadoDeImpresiones encargado= new EncargadoDeImpresiones();
+            encargado.setIdEncargadoDeImpresiones(Integer.parseInt(cursor.getString(0)));
+            encargado.setIdUsuario(cursor.getInt(1));
+            return encargado;
+        }else{
+            return null;
+        }
+    }
+
+    //-------------------ELIMINAR ENCARGADO DE IMPRESIONES-----------------
+    public String eliminarEncargado(String carnet){
+        String[] id = {carnet};
+        String regAfectados="filas afectadas= ";
+
+        //Integridad
+        //  if (verificarIntegridad(escuela,3)) {
+        //   contador+=db.delete("escuela", "codEscuela='"+escuela.getcodEscuela()+"'", null);
+        // }
+        int contador=0;
+        Cursor cursor = db.query("encargadoDeImpresiones", camposEncargado, "idEncargado = ?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            int idusuario=Integer.parseInt(cursor.getString(1));
+            contador+=db.delete("encargadoDeImpresiones", "idEncargado='"+carnet+"'", null);
+            contador+=db.delete("usuario", "idUsuario='"+idusuario+"'", null);
+        }
+        regAfectados+=contador;
+        return regAfectados;
+    }
+    //-------------------------------------- ACTUALIZAR ENCARGADO ----------------------------//
+    public String actualizarEncargado(EncargadoDeImpresiones encargado, Usuario usuario){
+        if(verificarIntegridad(encargado, 17)){
+            String[] id = {String.valueOf(encargado.getIdEncargadoDeImpresiones())};
+
+
+            ContentValues u = new ContentValues();
+
+            Cursor cursor = db.query("encargadoDeImpresiones", camposEncargado, "idEncargado = ?",  id, null, null, null);
+            if(cursor.moveToFirst()){
+
+                String idu = String.valueOf(cursor.getString(1));
+                u.put("correo",usuario.getCorreo());
+                u.put("contrasena",usuario.getContrasena());
+                u.put("tipo",usuario.getTipo());
+                db.update("usuario", u, "idUsuario = ?", new String[]{idu});
+                return "Registro Actualizado Correctamente";
+            }
+        }else{
+            return "Registro con ID " + encargado.getIdEncargadoDeImpresiones() + " no existe";
+        }
+        return "Algo salio mal";
+    }
+    //Insertar Docente
+    public String insertarDocente(Usuario user){
+        String regInsertados="Usuario Agregado con exito ";
+        long contador;
+        ContentValues doc = new ContentValues();
+        doc.put("correo",user.getCorreo());
+        doc.put("nombre",user.getNombre());
+        doc.put("contrasena",user.getContrasena());
+        doc.put("tipo",user.getTipo());
+        doc.put("sesion",user.isSesion());
+
+        contador=db.insert("usuario", null, doc);
+        if(contador==-1 || contador==0)
+        {
+            regInsertados= "Error al Insertar el registro, Registro Duplicado. Verificar inserción";
+        }
+
+        else {
+            regInsertados=regInsertados+contador;
+        }
+        String regInsertado="Docente Agregado con exito ";
+        long contado;
+        ContentValues docente = new ContentValues();
+        String[] id = {user.getCorreo()};
+        @SuppressLint("Recycle") Cursor cursor = db.query("usuario", camposUsuario, "correo = ?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            Usuario usua = new Usuario();
+            usua.setIdUsuario(Integer.parseInt(cursor.getString(0)));
+            docente.put("idUsuario",usua.getIdUsuario());
+            contado=db.insert("docente", null, docente);
+            if(contado==-1 || contado==0)
+            {
+                regInsertado= "Error al Insertar el registro, Registro Duplicado. Verificar inserción";
+            }
+        }
+        else
+        {
+            regInsertado="  Error al ingresar al docente";
+        }
+        return regInsertados+regInsertado;
+    }
+    //------------------METODO ACTUALIZAR DOCENTE -------------------------------------//
+
+    public String actualizarDocente(Docente docente, Usuario usuario){
+        if(verificarIntegridad(docente, 16)){
+            String[] id = {String.valueOf(docente.getIdDocente())};
+
+
+            ContentValues u = new ContentValues();
+
+            Cursor cursor = db.query("docente", camposDocente, "idDocente = ?",  id, null, null, null);
+            if(cursor.moveToFirst()){
+
+                String idu = String.valueOf(cursor.getString(1));
+                u.put("correo",usuario.getCorreo());
+                u.put("contrasena",usuario.getContrasena());
+                u.put("tipo",usuario.getTipo());
+                db.update("usuario", u, "idUsuario = ?", new String[]{idu});
+                return "Registro Actualizado Correctamente";
+            }
+        }else{
+            return "Registro con carnet " + docente.getIdDocente() + " no existe";
+        }
+        return "Algo salio mal";
+    }
+   //-----------------------Metodo borrar Docente---------------------------------------
+   public String eliminarDocente(String carnet){
+       String[] id = {carnet};
+       String regAfectados="filas afectadas= ";
+
+       //Integridad
+       //  if (verificarIntegridad(escuela,3)) {
+       //   contador+=db.delete("escuela", "codEscuela='"+escuela.getcodEscuela()+"'", null);
+       // }
+       int contador=0;
+       Cursor cursor = db.query("docente", camposDocente, "idDocente = ?",  id, null, null, null);
+       if(cursor.moveToFirst()){
+           int idusuario=Integer.parseInt(cursor.getString(1));
+           contador+=db.delete("docente", "idDocente='"+carnet+"'", null);
+           contador+=db.delete("usuario", "idUsuario='"+idusuario+"'", null);
+       }
+       regAfectados+=contador;
+       return regAfectados;
+   }
+    //Metodo consultar Docente
+    public Docente consultarDocente(String idDocente) {
+        String[] id = {idDocente};
+        Cursor cursor = db.query("docente", camposDocente, "idDocente = ?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            Docente docente= new Docente();
+            docente.setIdDocente(Integer.parseInt(cursor.getString(0)));
+            docente.setIdUsuario(cursor.getInt(1));
+            return docente;
         }else{
             return null;
         }
@@ -719,11 +915,31 @@ public class ControlBDGpo16 {
                     return true;}
                 return false;}
             case 15:{
-                //Verificar que exista el estudiante para poder actualizarlo.
+                //Verificar que exista la escuela para poder actualizarlo.
                 Escuela escuela = (Escuela) dato;
                 String[] id = {String.valueOf(escuela.getcodEscuela())};
                 abrir();
                 Cursor c = db.query("escuela", null, "codEscuela = ?", id, null, null,null);
+                if(c.moveToFirst()){
+                    //Se encontró el usuario.
+                    return true;}
+                return false;}
+            case 16:{
+                //Verificar que exista el docente para poder actualizarlo.
+                Docente docente = (Docente) dato;
+                String[] id = {String.valueOf(docente.getIdDocente())};
+                abrir();
+                Cursor c = db.query("docente", null, "idDocente = ?", id, null, null,null);
+                if(c.moveToFirst()){
+                    //Se encontró el usuario.
+                    return true;}
+                return false;}
+            case 17:{
+                //Verificar que exista el docente para poder actualizarlo.
+               EncargadoDeImpresiones encargado = (EncargadoDeImpresiones) dato;
+                String[] id = {String.valueOf(encargado.getIdEncargadoDeImpresiones())};
+                abrir();
+                Cursor c = db.query("encargadoDeImpresiones", null, "idEncargado = ?", id, null, null,null);
                 if(c.moveToFirst()){
                     //Se encontró el usuario.
                     return true;}
