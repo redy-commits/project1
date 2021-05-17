@@ -717,7 +717,12 @@ public class ControlBDGpo16 {
             evaluacion.setTipo((cursor.getString(4)));
             evaluacion.setFechaRealizacion(Date.valueOf(cursor.getString(5)));
             evaluacion.setFechaPublicacion(Date.valueOf(cursor.getString(6)));
-            return evaluacion;}else{return null;}}
+            return evaluacion;
+        }
+        else{
+            return null;
+        }
+    }
 
     public String actualizar(Evaluacion evaluacion) {
         if(verificarIntegridad(evaluacion, 18)){
@@ -731,7 +736,9 @@ public class ControlBDGpo16 {
             cv.put("fechaPublicacion",String.valueOf(evaluacion.getFechaPublicacion()));
             db.update("evaluacion", cv, "numEva = ?", id);
             return "Registro actualizado correctamente";}
-        else{return "La evaluacion "+evaluacion.getNumEva()+" no existe";}}
+        else{return "La evaluacion "+evaluacion.getNumEva()+" no existe";
+        }
+    }
 
     public String eliminar(Evaluacion evaluacion) {
         String regAfectados="Filas afectadas: ";
