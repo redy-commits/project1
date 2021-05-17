@@ -13,7 +13,7 @@ public class SegundaRevisionMenuActivity extends ListActivity {
     String[] menu={"Insertar Registro","Eliminar Registro","Consultar Registro",
             "Actualizar Registro"};
     String[]
-            activities={"SegundaRevisionInsertarActivity","SegundaRevisionEliminarActivity","SegundaRevisionConsultarActivity",
+            activities={"SegundaRevisionInsertarActivity","SegundaRevisionBorrarActivity","SegundaRevisionConsultarActivity",
             "SegundaRevisionActualizarActivity"};
 
     @Override

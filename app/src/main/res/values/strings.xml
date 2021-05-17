@@ -17,4 +17,7 @@
     <string name="idDocente">idDocente</string>
     <string name="id">id</string>
     <string name="idEncargado">idEncargado</string>
+    <string name="NumeroEvaluacion">NumeroEvaluacion</string>
+    <string name="nota">nota</string>
+    <string name="idRespuesta">idRespuestaSociedad</string>
 </resources>

@@ -21,6 +21,7 @@ public class ControlBDGpo16 {
     private static final String[] camposEstudiante= new String [] {"carnet","idUsuario"};
     private static final String[] camposDocente= new String [] {"idDocente","idUsuario"};
     private static final String[] camposEncargado= new String [] {"idEncargado","idUsuario"};
+    private static final String[] camposExamenIndividual= new String [] {"idExamen","numEva","carnet","nota"};
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private DatabaseHelper DBHelper;
@@ -323,6 +324,86 @@ public class ControlBDGpo16 {
         }else{
             return null;
         }
+    }
+    //---------------------------------------------Metodo insertar segunda revision ------------------------
+    public String insertarSegundaRevision( SegundaRevision segunda,String carnet, String numeva) {
+        String[] id = {carnet,numeva};
+
+        String regInsertados="Registro Insertado Nº= ";
+        long contador=0;
+        Cursor cursor = db.query("examenIndividual", camposExamenIndividual, "carnet = ? AND numEva=?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            ExamenIndividual examen = new ExamenIndividual();
+            int idExamen= Integer.parseInt(cursor.getString(0));
+            ContentValues exam = new ContentValues();
+            exam.put("idExamen",idExamen);
+            exam.put("respSociedadEstud", segunda.getRespSociedadEstud());
+            exam.put("idDocente", segunda.getIdDocente());
+            exam.put("idOtroDocente", segunda.getIdOtroDocente());
+            exam.put("notaDefinitiva", segunda.getNotaDefinitiva());
+
+            contador=db.insert("segundaRevision", null, exam);
+            if(contador==-1 || contador==0)
+            {
+                regInsertados= "Error al Insertar el registro, Registro  Duplicado. Verificar inserción";
+            }
+            else {
+                regInsertados=regInsertados+contador;
+            }
+            return regInsertados;
+
+
+        }else{
+            return null;
+        }
+   }
+    //---------------------------------------------METODO INSERTAR EXAMEN INDIVIDUAL -----------------------------------------------------------
+
+    public String insertarExamenIndividual(ExamenIndividual exa){
+        String regInsertados="Registro Insertado Nº= ";
+        long contador=0;
+        ContentValues examen = new ContentValues();
+        examen.put("numeva",exa.getNumeva());
+        examen.put("carnet", exa.getCarnet());
+        examen.put("nota", exa.getNota());
+        contador=db.insert("examenIndividual", null, examen);
+        if(contador==-1 || contador==0)
+        {
+            regInsertados= "Error al Insertar el registro, Registro  Duplicado. Verificar inserción";
+        }
+        else {
+            regInsertados=regInsertados+contador;
+        }
+        return regInsertados;
+    }
+    // Metodo Consultar Examen Individual
+    public ExamenIndividual consultarExamenIndividual( String carnet, String numeva) {
+        String[] id = {carnet,numeva};
+        Cursor cursor = db.query("examenIndividual", camposExamenIndividual, "carnet = ? AND numEva=?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            ExamenIndividual examen = new ExamenIndividual();
+            examen.setNumeva(Integer.parseInt(cursor.getString(1)));
+            examen.setCarnet(cursor.getString(2));
+            examen.setNota(Float.parseFloat(cursor.getString(3)));
+            return examen;
+        }else{
+            return null;
+        }
+    }
+    //METODO ELIMINAR EXAMEN INDIVIDUAL
+    public String eliminarExamenIndividual(String carnet, String numeva){
+        String regAfectados="filas afectadas= ";
+        int contador=0;
+        String[] id = {carnet,numeva};
+        Cursor cursor = db.query("examenIndividual", camposExamenIndividual, "carnet = ? AND numEva=?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+            contador+= db.delete("examenIndividual", "carnet = ? AND numEva=?",  id);
+        //  if (verificarIntegridad(escuela,3)) {
+        //   contador+=db.delete("escuela", "codEscuela='"+escuela.getcodEscuela()+"'", null);
+         }
+
+        regAfectados+=contador;
+        return regAfectados;
     }
 //Metodo insertar Escuela
     public String insertar(Escuela escuela){
