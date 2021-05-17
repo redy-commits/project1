@@ -26,6 +26,7 @@ public class ControlBDGpo16 {
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
+    private static final String[] camposLocal= new String [] {"idLocal","nombre"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -1348,4 +1349,41 @@ public class ControlBDGpo16 {
             db.update("cargo", cv, "idCargo = ?", id);
             return "Registro actualizado correctamente";}
         else{return "El cargo "+cargo.getIdCargo()+" no existe";}}
+        public String insertar(Local local){
+        String regInsertados="¡Local registrado!";
+        long contador=0;
+        ContentValues local_ = new ContentValues();
+        local_.put("idLocal",local.getIdLocal());
+        local_.put("nombre",local.getNombre());
+        contador=db.insert("local", null,local_);
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+    public Local consultarLocal(int idLocal){
+        String[] id = {String.valueOf(idLocal)};
+        Cursor cursor = db.query("local", camposLocal, "idLocal = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            Local local= new Local();
+            local.setIdLocal(cursor.getInt(0));
+            local.setNombre(cursor.getString(1));
+            return local;}else{return null;}}
+    public String eliminar(Local local) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("local", "idLocal='"+local.getIdLocal()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+    public String actualizar(Local local) {
+        if(verificarIntegridad(local, 1)){
+            String[] id = {String.valueOf(local.getIdLocal())};
+            ContentValues cv = new ContentValues();
+            cv.put("idLocal",local.getIdLocal());
+            cv.put("nombre",local.getNombre());
+            db.update("local", cv, "idLocal = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "El local "+local.getIdLocal()+" no existe";
+        }
+    }
 }
