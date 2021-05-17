@@ -25,7 +25,7 @@ public class ExamenIndividualBorrarActivity extends AppCompatActivity {
         editNota = (EditText) findViewById(R.id.editNota);
 
     }
-    public void consultarExamenIndividual(View v) {
+    public void eliminarExamenIndividual(View v) {
         helper.abrir();
        String examen =   helper.eliminarExamenIndividual(editCarnet.getText().toString(), editNumEva.getText().toString() );
         helper.cerrar();

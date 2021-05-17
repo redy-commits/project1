@@ -33,11 +33,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
         <Button
-            android:id="@+id/botonConsultar"
+            android:id="@+id/botonEliminar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/consultar"
-            android:onClick="consultarExamenIndividual"
+            android:text="@string/eliminar"
+            android:onClick="eliminarExamenIndividual"
             style="?android:attr/buttonBarButtonStyle" />
         <Button
             android:id="@+id/botonLimpiar"
@@ -48,21 +48,6 @@
             style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nota" />
-    <EditText
-        android:id="@+id/editNota"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:enabled ="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:cursorVisible="false"
-        android:longClickable="false"
-        android:autofillHints=""
-        tools:ignore="LabelFor" />
+
 
 </LinearLayout>

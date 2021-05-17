@@ -22,6 +22,7 @@ public class ControlBDGpo16 {
     private static final String[] camposDocente= new String [] {"idDocente","idUsuario"};
     private static final String[] camposEncargado= new String [] {"idEncargado","idUsuario"};
     private static final String[] camposExamenIndividual= new String [] {"idExamen","numEva","carnet","nota"};
+    private static final String[] camposSegundaRevision= new String [] {"numRev2","idExamen","respSociedadEstud","idDocente","idOtroDocente","notaDefinitiva"};
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
@@ -358,6 +359,43 @@ public class ControlBDGpo16 {
             return null;
         }
    }
+   //------------------------------CONSULTAR SEGUNDA REVISION---------------------------------------------//
+   public String consultarSegundaRevision( String carnet, String numeva) {
+       String[] id = {carnet,numeva};
+       Cursor cursor = db.query("examenIndividual", camposExamenIndividual, "carnet = ? AND numEva=?",  id, null, null, null);
+       if(cursor.moveToFirst()){
+
+           String[] idExamen={cursor.getString(0)};
+           Cursor curso = db.query("segundaRevision", camposSegundaRevision, "idExamen = ?",  idExamen, null, null, null);
+           if(curso.moveToFirst()){
+                return curso.getString(5);
+           }
+           else {
+               return "El estudiante no presento segunda revision";
+           }
+
+       }else{
+           return null;
+       }
+   }
+    public String eliminarSegundaRevision( String carnet, String numeva) {
+        String[] id = {carnet,numeva};
+        Cursor cursor = db.query("examenIndividual", camposExamenIndividual, "carnet = ? AND numEva=?",  id, null, null, null);
+        if(cursor.moveToFirst()){
+
+            String[] idExamen={cursor.getString(0)};
+            int curso = db.delete("segundaRevision",  "idExamen = ?",  idExamen);
+            if(curso > 0){
+                return "Segunda revision eliminada";
+            }
+            else {
+                return "El estudiante no presento segunda revision";
+            }
+
+        }else{
+            return null;
+        }
+    }
     //---------------------------------------------METODO INSERTAR EXAMEN INDIVIDUAL -----------------------------------------------------------
 
     public String insertarExamenIndividual(ExamenIndividual exa){
