@@ -20,6 +20,7 @@ public class ControlBDGpo16 {
     private static final String[] camposEscuela= new String [] {"codEscuela","nombre"};
     private static final String[] camposEstudiante= new String [] {"carnet","idUsuario"};
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
+    private static final String[] camposCargo= new String [] {"idCargo","NombreCargo"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -902,4 +903,40 @@ public class ControlBDGpo16 {
             matricula.setCodMateria(cursor.getString(2));
             matricula.setIdCiclo(cursor.getInt(3));
             matricula.setNumMatricula(cursor.getInt(4));
-            return matricula;}else{return null;}}}
+            return matricula;}else{return null;}}
+    public String insertar(Cargo cargo){
+        String regInsertados="¡Cargo registrado!";
+        long contador=0;
+        ContentValues cargo_ = new ContentValues();
+        cargo_.put("idCargo",cargo.getIdCargo());
+        cargo_.put("NombreCargo",cargo.getNombreCargo());
+        contador=db.insert("cargo", null,cargo_);
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+    public Cargo consultarCargo(int idCargo){
+        String[] id = {String.valueOf(idCargo)};
+        Cursor cursor = db.query("cargo", camposCargo, "idCargo = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            Cargo cargo = new Cargo();
+            cargo.setIdCargo(cursor.getInt(0));
+            cargo.setNombreCargo(cursor.getString(1));
+            return cargo;}else{return null;}}
+    public String eliminar(Cargo cargo) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("cargo", "idCargo='"+cargo.getIdCargo()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+    public String actualizar(Cargo cargo) {
+        if(verificarIntegridad(cargo, 1)){
+            String[] id = {String.valueOf(cargo.getIdCargo())};
+            ContentValues cv = new ContentValues();
+            cv.put("idCargo",cargo.getIdCargo());
+            cv.put("nombreCargo",cargo.getNombreCargo());
+            db.update("cargo", cv, "idCargo = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "El cargo "+cargo.getIdCargo()+" no existe";}}
+}
