@@ -1030,7 +1030,38 @@ public class ControlBDGpo16 {
                 db.execSQL("create trigger updateNotaSR after insert on segundaRevision begin update examenIndividual set nota=new.notaDefinitiva where examenIndividual.idExamen=new.idExamen; END;");
                 db.execSQL("create trigger updateNotaR after update on solicitudDeCambio when new.estadoAprobado=1 begin update examenIndividual set nota=new.nuevaNota where examenIndividual.idExamen=new.idExamen; END;");
                 db.execSQL("create trigger updateSolicitudI after update on solicitudDeImpresiones when new.numPaginas<>old.numPaginas begin update solicitudDeImpresiones set estadoAprobado=0 where solicitudDeImpresiones.idSolicitud=new.idSolicitud; END;");
-                db.execSQL("insert into usuario values (1,'docente','1234','Rodolfo Zelaya','zelaya@gmail.com',0);");
+                db.execSQL("insert into usuario values (1,'superusuario','1234','Súper Usuario','superuser@gmail.com',0);");
+                db.execSQL("insert into usuario values (2,'docente','2345','César Augusto González Rodríguez','cesar.gonzalez@gmail.com',0);");
+                db.execSQL("insert into docente values (1,2);");
+                db.execSQL("insert into usuario values (3,'admin','3456','Verónica Rocío Almogabar Santos','veronica.almogabar@gmail.com',0);");
+                db.execSQL("insert into administrador values (1,3);");
+                db.execSQL("insert into usuario values (4,'estudiante','4567','Daniela Katherinne Suarique Ávila','daniela.suarique@gmail.com',0);");
+                db.execSQL("insert into docente values ('SA18043',4);");
+                db.execSQL("insert into usuario values (5,'instructor','5678','Oscar Ricardo Ovalle Solano','oscar.ovalle@gmail.com',0);");
+                db.execSQL("insert into instructor values (1,5);");
+                db.execSQL("insert into usuario values (6,'encargado','6789','Jorge Esteban Coral Burbano','jorge.coral@gmail.com',0);");
+                db.execSQL("insert into encargadoDeImpresiones values (1,6);");
+                db.execSQL("insert into permiso values (1,'Manipular tabla segundaRevision');");
+                db.execSQL("insert into permiso values (2,'Manipular tabla examenIndividual');");
+                db.execSQL("insert into permiso values (3,'Manipular tabla evaluacion');");
+                db.execSQL("insert into permiso values (4,'Manipular tabla reservacion');");
+                db.execSQL("insert into permiso values (5,'Manipular tabla revision');");
+                db.execSQL("insert into permiso values (6,'Manipular tabla matricula');");
+                db.execSQL("insert into permiso values (7,'Realizar la solicitud de impresiones');");
+                db.execSQL("insert into permiso values (8,'Aceptar o denegar solicitudes de impresiones');");
+                db.execSQL("insert into permiso values (9,'Aceptar o denegar solicitudes de cambio de notas');");
+                db.execSQL("insert into permiso values (10,'Realizar solicitud de cambio de notas');");
+                db.execSQL("insert into accesoUsuario values (2,2);");
+                db.execSQL("insert into accesoUsuario values (2,3);");
+                db.execSQL("insert into accesoUsuario values (2,4);");
+                db.execSQL("insert into accesoUsuario values (2,5);");
+                db.execSQL("insert into accesoUsuario values (2,7);");
+                db.execSQL("insert into accesoUsuario values (2,10);");
+                db.execSQL("insert into accesoUsuario values (3,9);");
+                db.execSQL("insert into accesoUsuario values (3,1);");
+                db.execSQL("insert into accesoUsuario values (4,6);");
+                db.execSQL("insert into accesoUsuario values (5,7);");
+                db.execSQL("insert into accesoUsuario values (6,8);");
             }catch(SQLException e){e.printStackTrace();}}
 
         @Override
