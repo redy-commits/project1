@@ -26,6 +26,7 @@ public class ControlBDGpo16 {
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
+    private static final String[] camposRevision= new String[] {"numRev1", "idExamen", "asistio", "nuevaNota", "observ"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -836,12 +837,8 @@ public class ControlBDGpo16 {
             evaluacion.setTipo((cursor.getString(4)));
             evaluacion.setFechaRealizacion(Date.valueOf(cursor.getString(5)));
             evaluacion.setFechaPublicacion(Date.valueOf(cursor.getString(6)));
-            return evaluacion;
-        }
-        else{
-            return null;
-        }
-    }
+            return evaluacion;}else{
+            return null;}}
 
     public String actualizar(Evaluacion evaluacion) {
         if(verificarIntegridad(evaluacion, 18)){
@@ -855,9 +852,7 @@ public class ControlBDGpo16 {
             cv.put("fechaPublicacion",String.valueOf(evaluacion.getFechaPublicacion()));
             db.update("evaluacion", cv, "numEva = ?", id);
             return "Registro actualizado correctamente";}
-        else{return "La evaluacion "+evaluacion.getNumEva()+" no existe";
-        }
-    }
+        else{return "La evaluacion "+evaluacion.getNumEva()+" no existe";}}
 
     public String eliminar(Evaluacion evaluacion) {
         String regAfectados="Filas afectadas: ";
@@ -865,6 +860,24 @@ public class ControlBDGpo16 {
         contador+=db.delete("evaluacion", "numEva='"+evaluacion.getNumEva()+"'", null);
         regAfectados+=contador;
         return regAfectados;}
+
+
+// Metodos de la tabla Revision
+    public String insertar(Revision revision){
+        String regInsertados="¡Revision registrada!";
+        long contador=0;
+        ContentValues revision_ = new ContentValues();
+        revision_.put("numRev1", revision.getNumRev1());
+        revision_.put("idExamen", revision.getIdExamen());
+        revision_.put("asistio", revision.isAsistio());
+        revision_.put("nuevaNota", revision.getNuevaNota());
+        revision_.put("observ", revision.getObserv());
+        contador=db.insert("revision", null,revision_);
+
+    if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+    return regInsertados;}
+
 
 
 
