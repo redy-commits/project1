@@ -24,6 +24,7 @@ public class ControlBDGpo16 {
     private static final String[] camposExamenIndividual= new String [] {"idExamen","numEva","carnet","nota"};
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
+    private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -765,6 +766,69 @@ public class ControlBDGpo16 {
         else{return true;}}
 
 
+    //Metodos de la tabla Evaluacion
+
+    public String insertar(Evaluacion evaluacion){
+        String regInsertados="¡Evaluacion registrada!";
+        long contador=0;
+        ContentValues evaluacion_ = new ContentValues();
+        evaluacion_.put("numEva", evaluacion.getNumEva());
+        evaluacion_.put("idDocente", evaluacion.getIdDocente());
+        evaluacion_.put("alumnosEvaluados", evaluacion.getAlumnosEvaluados());
+        evaluacion_.put("codMateria", evaluacion.getCodMateria());
+        evaluacion_.put("tipo", evaluacion.getTipo());
+        evaluacion_.put("fechaRealizacion", String.valueOf(evaluacion.getFechaRealizacion()));
+        evaluacion_.put("fechaPublicacion", String.valueOf(evaluacion.getFechaPublicacion()));
+        contador=db.insert("evaluacion", null,evaluacion_);
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+
+    public Evaluacion consultarEvaluacion(int numEva){
+        String[] id = {String.valueOf(numEva)};
+        Cursor cursor = db.query("evaluacion", camposEvaluacion, "numEva = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            Evaluacion evaluacion = new Evaluacion();
+            evaluacion.setNumEva(cursor.getInt(0));
+            evaluacion.setIdDocente(cursor.getInt(1));
+            evaluacion.setAlumnosEvaluados(cursor.getInt(2));
+            evaluacion.setCodMateria((cursor.getString(3)));
+            evaluacion.setTipo((cursor.getString(4)));
+            evaluacion.setFechaRealizacion(Date.valueOf(cursor.getString(5)));
+            evaluacion.setFechaPublicacion(Date.valueOf(cursor.getString(6)));
+            return evaluacion;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public String actualizar(Evaluacion evaluacion) {
+        if(verificarIntegridad(evaluacion, 18)){
+            String[] id = {String.valueOf(evaluacion.getNumEva())};
+            ContentValues cv = new ContentValues();
+            cv.put("idDocente",evaluacion.getIdDocente());
+            cv.put("alumnosEvaluados",evaluacion.getAlumnosEvaluados());
+            cv.put("codMateria",evaluacion.getCodMateria());
+            cv.put("tipo",evaluacion.getTipo());
+            cv.put("fechaRealizacion",String.valueOf(evaluacion.getFechaRealizacion()));
+            cv.put("fechaPublicacion",String.valueOf(evaluacion.getFechaPublicacion()));
+            db.update("evaluacion", cv, "numEva = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "La evaluacion "+evaluacion.getNumEva()+" no existe";
+        }
+    }
+
+    public String eliminar(Evaluacion evaluacion) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("evaluacion", "numEva='"+evaluacion.getNumEva()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+
+
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String BASE_DATOS = "db.s3db";
@@ -1115,6 +1179,16 @@ public class ControlBDGpo16 {
                 Cursor c = db.query("encargadoDeImpresiones", null, "idEncargado = ?", id, null, null,null);
                 if(c.moveToFirst()){
                     //Se encontró el usuario.
+                    return true;}
+                return false;}
+            case 18:{
+                //Verificar que exista la evaluacion para actualizarla.
+                Evaluacion evaluacion = (Evaluacion) dato;
+                String[] id = {String.valueOf(evaluacion.getNumEva())};
+                abrir();
+                Cursor c = db.query("evaluacion", null, "numEva = ?", id, null, null,null);
+                if(c.moveToFirst()){
+                    //Se encontró la evaluacion.
                     return true;}
                 return false;}
             default:
