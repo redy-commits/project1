@@ -22,7 +22,7 @@ public class ControlBDGpo16 {
     private static final String[] camposDocente= new String [] {"idDocente","idUsuario"};
     private static final String[] camposEncargado= new String [] {"idEncargado","idUsuario"};
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
-    private static final String[] camposCargo= new String [] {"idCargo","NombreCargo"};
+    private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -664,25 +664,6 @@ public class ControlBDGpo16 {
         if(contador==0){return false;}
         else{return true;}}
 
-    //Métodos para la tabla Instructor_Emite.
-
-    public boolean insertar(Instructor_Emite instructor_Emite){
-        if(verificarIntegridad(instructor_Emite, 11)){
-            long contador=0;
-            ContentValues instructor_Emite_ = new ContentValues();
-            instructor_Emite_.put("carnet",instructor_Emite.getCarnet());
-            instructor_Emite_.put("idSolicitud",instructor_Emite.getIdSolicitud());
-            contador=db.insert("emite", null,instructor_Emite_);
-            if(contador==-1 || contador==0){return false;}
-            else{return true;}}
-        else{return false;}}
-
-    public boolean eliminar(Instructor_Emite instructor_Emite){
-        int contador=0;
-        contador+=db.delete("instructor_Emite", "carnet='"+instructor_Emite.getCarnet()+"' and idSolicitud='"+instructor_Emite.getIdSolicitud()+"'", null);
-        if(contador==0){return false;}
-        else{return true;}}
-
     //Métodos para la tabla Posee.
 
     public boolean insertar(Posee posee){
@@ -989,18 +970,6 @@ public class ControlBDGpo16 {
                 abrir();
                 Cursor c1 = db.query("usuario", null, "idUsuario = ?", id1,null, null, null);
                 Cursor c2 = db.query("permiso", null, "idPermiso = ?", id2, null,null, null);
-                if(c1.moveToFirst() && c2.moveToFirst()){
-                    //Se encontraron datos.
-                    return true;}
-                return false;}
-            case 11:{
-                //Verificar que al registrar un acceso de usuario, existan el usuario y el permiso.
-                Instructor_Emite instructor_Emite = (Instructor_Emite)dato;
-                String[] id1 = {String.valueOf(instructor_Emite.getCarnet())};
-                String[] id2 = {String.valueOf(instructor_Emite.getIdSolicitud())};
-                abrir();
-                Cursor c1 = db.query("estudiante", null, "carnet = ?", id1,null, null, null);
-                Cursor c2 = db.query("solicitudDeImpresiones", null, "idSolicitud = ?", id2, null,null, null);
                 if(c1.moveToFirst() && c2.moveToFirst()){
                     //Se encontraron datos.
                     return true;}
