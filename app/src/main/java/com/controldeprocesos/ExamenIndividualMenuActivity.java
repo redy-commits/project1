@@ -12,8 +12,7 @@ import android.widget.ListView;
 
 public class ExamenIndividualMenuActivity extends ListActivity {
 
-    String[] menu={"Insertar Registro","Eliminar Registro","Consultar Registro",
-            "Actualizar Registro"};
+    String[] menu={"Insertar Registro","Eliminar Registro","Consultar Registro","Actualizar Registro"};
     String[]
             activities={"ExamenIndividualInsertarActivity","ExamenIndividualBorrarActivity","ExamenIndividualConsultarActivity","ExamenIndividualActualizarActivity"};
 
