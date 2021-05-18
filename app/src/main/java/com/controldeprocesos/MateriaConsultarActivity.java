@@ -21,9 +21,7 @@ public class MateriaConsultarActivity extends AppCompatActivity {
         helper = new ControlBDGpo16(this);
         edtCodMateria=(EditText)findViewById(R.id.edtCodMateria);
         txtCodEscuela=(TextView)findViewById(R.id.txtCodEscuela);
-        txtNombre=(TextView)findViewById(R.id.txtNombre);
-        txtCodEscuela.setText("");
-        txtNombre.setText("");}
+        txtNombre=(TextView)findViewById(R.id.txtNombre);}
 
     public void consultarMateria(View v) {
         helper.abrir();

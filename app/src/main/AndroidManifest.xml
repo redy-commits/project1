@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ControlDeProcesosAdministrativos">
-        <activity android:name=".Login"></activity>
+        <activity android:name=".SolicitudDeCambioMenuActivity"></activity>
+        <activity android:name=".SolicitudDeCambioConsultarActivity" />
+        <activity android:name=".SolicitudDeCambioActualizarActivity" />
+        <activity android:name=".SolicitudDeCambioBorrarActivity" />
+        <activity android:name=".SolicitudDeCambioInsertarActivity" />
+        <activity android:name=".Login" />
         <activity android:name=".CicloInsertarActivity" />
         <activity android:name=".MateriaInsertarActivity" />
         <activity android:name=".ReservacionInsertarActivity" />

@@ -20,9 +20,7 @@ public class CicloConsultarActivity extends Activity {
         helper = new ControlBDGpo16(this);
         edtIdCiclo=(EditText)findViewById(R.id.edtIdCiclo);
         txtAnio=(TextView)findViewById(R.id.txtAnio);
-        txtNumCiclo=(TextView)findViewById(R.id.txtNumCiclo);
-        txtAnio.setText("");
-        txtNumCiclo.setText("");}
+        txtNumCiclo=(TextView)findViewById(R.id.txtNumCiclo);}
 
     public void consultarCiclo(View v) {
             helper.abrir();

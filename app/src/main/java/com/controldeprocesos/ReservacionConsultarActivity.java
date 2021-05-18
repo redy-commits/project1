@@ -23,12 +23,7 @@ public class ReservacionConsultarActivity extends Activity {
         txtIdDocente=(TextView)findViewById(R.id.txtIdDocente);
         txtHoraInicio=(TextView)findViewById(R.id.txtHoraInicio);
         txtHoraFin=(TextView)findViewById(R.id.txtHoraFin);
-        txtFecha=(TextView)findViewById(R.id.txtFecha);
-        txtHoraFin.setText("");
-        txtIdLocal.setText("");
-        txtIdDocente.setText("");
-        txtHoraInicio.setText("");
-        txtFecha.setText("");}
+        txtFecha=(TextView)findViewById(R.id.txtFecha);}
 
     public void consultarReservacion(View v) {
         helper.abrir();

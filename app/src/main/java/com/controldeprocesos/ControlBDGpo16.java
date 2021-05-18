@@ -27,6 +27,7 @@ public class ControlBDGpo16 {
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
     private static final String[] camposLocal= new String [] {"idLocal","nombre"};
+    private static final String[] camposSolicitudDeCambio= new String [] {"idSolicitudCambio","idExamen","idRazon","nuvaNota","estadoAprobado"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -598,6 +599,56 @@ public class ControlBDGpo16 {
         String regAfectados="Filas afectadas: ";
         int contador=0;
         if(verificarIntegridad(ciclo, 3)){contador+=db.delete("ciclo", "idCiclo='"+ciclo.getIdCiclo()+"'", null);}
+        regAfectados+=contador;
+        return regAfectados;}
+
+    //Métodos para la tabla SolicitudDeCambio.
+
+    public String insertar(SolicitudDeCambio solicitudDeCambio){
+        String regInsertados="¡Solicitud de cambio registrada!";
+        long contador=0;
+        if(verificarIntegridad(solicitudDeCambio, 11)){
+        ContentValues solicitudDeCambio_ = new ContentValues();
+        solicitudDeCambio_.put("idSolicitudCambio",solicitudDeCambio.getIdSolicitudCambio());
+        solicitudDeCambio_.put("idExamen",solicitudDeCambio.getIdExamen());
+        solicitudDeCambio_.put("idRazon",solicitudDeCambio.getIdRazon());
+        solicitudDeCambio_.put("nuevaNota",solicitudDeCambio.getIdRazon());
+        solicitudDeCambio_.put("estadoAprobado",solicitudDeCambio.getIdRazon());
+        contador=db.insert("solicitudDeCambio", null,solicitudDeCambio_);}
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+
+    public SolicitudDeCambio consultarSolicitudDeCambio(int idSolicitud){
+        String[] id = {String.valueOf(idSolicitud)};
+        Cursor cursor = db.query("solicitudDeCambio", camposSolicitudDeCambio, "idSolicitudCambio = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            SolicitudDeCambio solicitudDeCambio= new SolicitudDeCambio();
+            solicitudDeCambio.setIdSolicitudCambio(cursor.getInt(0));
+            solicitudDeCambio.setIdExamen(cursor.getInt(1));
+            solicitudDeCambio.setIdRazon(cursor.getInt(2));
+            solicitudDeCambio.setNuevaNota(cursor.getFloat(3));
+            solicitudDeCambio.setEstadoAprobado(Boolean.valueOf(cursor.getString(4)));
+            return solicitudDeCambio;}else{return null;}}
+
+    public String actualizar(SolicitudDeCambio solicitudDeCambio) {
+        if(verificarIntegridad(solicitudDeCambio, 19)){
+            String[] id = {String.valueOf(solicitudDeCambio.getIdSolicitudCambio())};
+            ContentValues cv = new ContentValues();
+            cv.put("idExamen",solicitudDeCambio.getIdExamen());
+            cv.put("idRazon",solicitudDeCambio.getIdRazon());
+            cv.put("nuevaNota",solicitudDeCambio.getNuevaNota());
+            cv.put("estadoAprobado",solicitudDeCambio.isEstadoAprobado());
+            db.update("solicitudDeCambio", cv, "idCiclo = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "La solicitud de cambio "+solicitudDeCambio.getIdSolicitudCambio()+" no existe";}}
+
+    public String eliminar(SolicitudDeCambio solicitudDeCambio) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("solicitudDeCambio", "idSolicitudCambio='"+solicitudDeCambio.getIdSolicitudCambio()+"'", null);
         regAfectados+=contador;
         return regAfectados;}
 
@@ -1199,6 +1250,18 @@ public class ControlBDGpo16 {
                 abrir();
                 Cursor c1 = db.query("usuario", null, "idUsuario = ?", id1,null, null, null);
                 Cursor c2 = db.query("permiso", null, "idPermiso = ?", id2, null,null, null);
+                if(c1.moveToFirst() && c2.moveToFirst()){
+                    //Se encontraron datos.
+                    return true;}
+                return false;}
+            case 11:{
+                //Verificar que al registrar una solicitud de cambio de nota, existan el examen y la razón.
+                SolicitudDeCambio solicitudDeCambio= (SolicitudDeCambio)dato;
+                String[] id1 = {String.valueOf(solicitudDeCambio.getIdExamen())};
+                String[] id2 = {String.valueOf(solicitudDeCambio.getIdRazon())};
+                abrir();
+                Cursor c1 = db.query("examenIndividual", null, "idExamen = ?", id1,null, null, null);
+                Cursor c2 = db.query("razon", null, "idRazon = ?", id2, null,null, null);
                 if(c1.moveToFirst() && c2.moveToFirst()){
                     //Se encontraron datos.
                     return true;}
