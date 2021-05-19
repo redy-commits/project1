@@ -27,6 +27,7 @@ public class ControlBDGpo16 {
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
     private static final String[] camposRevision= new String [] {"numRev1", "idExamen", "nuevaNota", "observ","asistio"};
+    private static final String[] camposSolicitudDeImpresiones= new String[] {"idSolicitud", "numPaginas", "estadoAprobado"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -922,6 +923,58 @@ public class ControlBDGpo16 {
         return regAfectados;}
 
 
+    // Metodos de la tabla Solicitud de Impresiones
+    public String insertarSolicitudDeImpresiones(SolicitudDeImpresiones solicitud){
+        String regInsertados="¡Solicitud de impresion registrada con exito!";
+        long contador=0;
+        ContentValues sol = new ContentValues();
+        sol.put("idSolicitud", solicitud.getIdSolicitud());
+        sol.put("numPaginas", solicitud.getNumPaginas());
+        sol.put("estadoAprobado", solicitud.isEstadoAprobado());
+        contador= db.insert("solicitud", null, sol);
+
+        if(contador==-1 || contador==0){
+            regInsertados= "Error al insertar el nuevo registro. Verifique nuevamente";
+        }
+        else{
+            regInsertados=regInsertados+contador;
+        }
+        return regInsertados;
+    }
+
+    public SolicitudDeImpresiones consultarSolicitudDeImpresiones(int idSolicitud){
+        String[] id = {String.valueOf(idSolicitud)};
+        Cursor cursor = db.query("solicitud", camposSolicitudDeImpresiones, "idSolicitud = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            SolicitudDeImpresiones solicitud = new SolicitudDeImpresiones();
+            solicitud.setIdSolicitud(cursor.getInt(0));
+            solicitud.setNumPaginas(cursor.getInt(1));
+            solicitud.setEstadoAprobado(Boolean.valueOf(cursor.getString(2)));
+            return solicitud;}else{
+            return null;}}
+
+    public String actualizarSolicitudDeImpresiones(SolicitudDeImpresiones solicitud) {
+        if(verificarIntegridad(solicitud, 20)){
+            String[] id = {String.valueOf(solicitud.getIdSolicitud())};
+            ContentValues cv = new ContentValues();
+            cv.put("numPaginas",solicitud.getNumPaginas());
+            cv.put("estadoAprobado",solicitud.isEstadoAprobado());
+            db.update("solicitud", cv, "idSolicitud = ?", id);
+            return "Registro actualizado correctamente";
+        }
+        else{
+            return "La solicitud de impresion "+solicitud.getIdSolicitud()+" no existe";}
+    }
+
+    public String eliminarSolicitudDeImpresiones(SolicitudDeImpresiones solicitud) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("solicitud", "idSolicitud='"+solicitud.getIdSolicitud()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String BASE_DATOS = "db.s3db";
         private static final int VERSION = 1;
@@ -1291,6 +1344,16 @@ public class ControlBDGpo16 {
                 Cursor c = db.query("revision", null, "numRev1 = ?", id, null, null,null);
                 if(c.moveToFirst()){
                     //Se encontró la revision.
+                    return true;}
+                return false;}
+            case 20:{
+                //Verificar que exista la solicitud de impresion para actualizarla.
+                SolicitudDeImpresiones solicitud = (SolicitudDeImpresiones) dato;
+                String[] id = {String.valueOf(solicitud.getIdSolicitud())};
+                abrir();
+                Cursor c = db.query("solicitud", null, "idSolicitud = ?", id, null, null,null);
+                if(c.moveToFirst()){
+                    //Se encontró la solicitud de impresion.
                     return true;}
                 return false;}
             default:
