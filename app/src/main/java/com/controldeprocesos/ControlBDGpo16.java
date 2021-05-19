@@ -28,6 +28,8 @@ public class ControlBDGpo16 {
     private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
     private static final String[] camposRevision= new String [] {"numRev1", "idExamen", "nuevaNota", "observ","asistio"};
     private static final String[] camposSolicitudDeImpresiones= new String[] {"idSolicitud", "numPaginas", "estadoAprobado"};
+    private static final String[] camposLocal= new String [] {"idLocal","nombre"};
+    private static final String[] camposSolicitudDeCambio= new String [] {"idSolicitudCambio","idExamen","idRazon","nuvaNota","estadoAprobado"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
