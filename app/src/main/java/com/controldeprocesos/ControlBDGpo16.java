@@ -602,6 +602,56 @@ public class ControlBDGpo16 {
         regAfectados+=contador;
         return regAfectados;}
 
+    //Métodos para la tabla SolicitudDeCambio.
+
+    public String insertar(SolicitudDeCambio solicitudDeCambio){
+        String regInsertados="¡Solicitud de cambio registrada!";
+        long contador=0;
+        if(verificarIntegridad(solicitudDeCambio, 11)){
+        ContentValues solicitudDeCambio_ = new ContentValues();
+        solicitudDeCambio_.put("idSolicitudCambio",solicitudDeCambio.getIdSolicitudCambio());
+        solicitudDeCambio_.put("idExamen",solicitudDeCambio.getIdExamen());
+        solicitudDeCambio_.put("idRazon",solicitudDeCambio.getIdRazon());
+        solicitudDeCambio_.put("nuevaNota",solicitudDeCambio.getIdRazon());
+        solicitudDeCambio_.put("estadoAprobado",solicitudDeCambio.getIdRazon());
+        contador=db.insert("solicitudDeCambio", null,solicitudDeCambio_);}
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+
+    public SolicitudDeCambio consultarSolicitudDeCambio(int idSolicitud){
+        String[] id = {String.valueOf(idSolicitud)};
+        Cursor cursor = db.query("solicitudDeCambio", camposSolicitudDeCambio, "idSolicitudCambio = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            SolicitudDeCambio solicitudDeCambio= new SolicitudDeCambio();
+            solicitudDeCambio.setIdSolicitudCambio(cursor.getInt(0));
+            solicitudDeCambio.setIdExamen(cursor.getInt(1));
+            solicitudDeCambio.setIdRazon(cursor.getInt(2));
+            solicitudDeCambio.setNuevaNota(cursor.getFloat(3));
+            solicitudDeCambio.setEstadoAprobado(Boolean.valueOf(cursor.getString(4)));
+            return solicitudDeCambio;}else{return null;}}
+
+    public String actualizar(SolicitudDeCambio solicitudDeCambio) {
+        if(verificarIntegridad(solicitudDeCambio, 19)){
+            String[] id = {String.valueOf(solicitudDeCambio.getIdSolicitudCambio())};
+            ContentValues cv = new ContentValues();
+            cv.put("idExamen",solicitudDeCambio.getIdExamen());
+            cv.put("idRazon",solicitudDeCambio.getIdRazon());
+            cv.put("nuevaNota",solicitudDeCambio.getNuevaNota());
+            cv.put("estadoAprobado",solicitudDeCambio.isEstadoAprobado());
+            db.update("solicitudDeCambio", cv, "idCiclo = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "La solicitud de cambio "+solicitudDeCambio.getIdSolicitudCambio()+" no existe";}}
+
+    public String eliminar(SolicitudDeCambio solicitudDeCambio) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("solicitudDeCambio", "idSolicitudCambio='"+solicitudDeCambio.getIdSolicitudCambio()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+
     //Métodos para la tabla Materia.
 
     public String insertar(Materia materia){
@@ -681,6 +731,20 @@ public class ControlBDGpo16 {
     public Usuario consultarUsuario(int idUsuario){
         String[] id = {String.valueOf(idUsuario)};
         Cursor c = db.query("usuario", camposUsuario, "idUsuario = ?", id, null, null, null);
+
+        if(c.moveToFirst()){
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(c.getInt(0));
+            usuario.setTipo(c.getString(1));
+            usuario.setContrasena(c.getString(2));
+            usuario.setNombre(c.getString(3));
+            usuario.setCorreo(c.getString(4));
+            usuario.setSesion(Boolean.valueOf(c.getString(5)));
+            return usuario;}else{return null;}}
+
+    public Usuario consultarUsuario(String correo){
+        String[] id = {correo};
+        Cursor c = db.query("usuario", camposUsuario, "correo = ?", id, null, null, null);
 
         if(c.moveToFirst()){
             Usuario usuario = new Usuario();
@@ -1137,7 +1201,38 @@ public class ControlBDGpo16 {
                 db.execSQL("create trigger updateNotaSR after insert on segundaRevision begin update examenIndividual set nota=new.notaDefinitiva where examenIndividual.idExamen=new.idExamen; END;");
                 db.execSQL("create trigger updateNotaR after update on solicitudDeCambio when new.estadoAprobado=1 begin update examenIndividual set nota=new.nuevaNota where examenIndividual.idExamen=new.idExamen; END;");
                 db.execSQL("create trigger updateSolicitudI after update on solicitudDeImpresiones when new.numPaginas<>old.numPaginas begin update solicitudDeImpresiones set estadoAprobado=0 where solicitudDeImpresiones.idSolicitud=new.idSolicitud; END;");
-                db.execSQL("insert into usuario values (1,'docente','1234','Rodolfo Zelaya','zelaya@gmail.com',0);");
+                db.execSQL("insert into usuario values (1,'superusuario','1234','Súper Usuario','superuser@gmail.com',0);");
+                db.execSQL("insert into usuario values (2,'docente','2345','César Augusto González Rodríguez','cesar.gonzalez@gmail.com',0);");
+                db.execSQL("insert into docente values (1,2);");
+                db.execSQL("insert into usuario values (3,'admin','3456','Verónica Rocío Almogabar Santos','veronica.almogabar@gmail.com',0);");
+                db.execSQL("insert into administrador values (1,3);");
+                db.execSQL("insert into usuario values (4,'estudiante','4567','Daniela Katherinne Suarique Ávila','daniela.suarique@gmail.com',0);");
+                db.execSQL("insert into estudiante values ('SA18043',4);");
+                db.execSQL("insert into usuario values (5,'instructor','5678','Oscar Ricardo Ovalle Solano','oscar.ovalle@gmail.com',0);");
+                db.execSQL("insert into instructor values (1,5);");
+                db.execSQL("insert into usuario values (6,'encargado','6789','Jorge Esteban Coral Burbano','jorge.coral@gmail.com',0);");
+                db.execSQL("insert into encargadoDeImpresiones values (1,6);");
+                db.execSQL("insert into permiso values (1,'Manipular tabla segundaRevision');");
+                db.execSQL("insert into permiso values (2,'Manipular tabla examenIndividual');");
+                db.execSQL("insert into permiso values (3,'Manipular tabla evaluacion');");
+                db.execSQL("insert into permiso values (4,'Manipular tabla reservacion');");
+                db.execSQL("insert into permiso values (5,'Manipular tabla revision');");
+                db.execSQL("insert into permiso values (6,'Manipular tabla matricula');");
+                db.execSQL("insert into permiso values (7,'Realizar la solicitud de impresiones');");
+                db.execSQL("insert into permiso values (8,'Aceptar o denegar solicitudes de impresiones');");
+                db.execSQL("insert into permiso values (9,'Aceptar o denegar solicitudes de cambio de notas');");
+                db.execSQL("insert into permiso values (10,'Realizar solicitud de cambio de notas');");
+                db.execSQL("insert into accesoUsuario values (2,2);");
+                db.execSQL("insert into accesoUsuario values (2,3);");
+                db.execSQL("insert into accesoUsuario values (2,4);");
+                db.execSQL("insert into accesoUsuario values (2,5);");
+                db.execSQL("insert into accesoUsuario values (2,7);");
+                db.execSQL("insert into accesoUsuario values (2,10);");
+                db.execSQL("insert into accesoUsuario values (3,9);");
+                db.execSQL("insert into accesoUsuario values (3,1);");
+                db.execSQL("insert into accesoUsuario values (4,6);");
+                db.execSQL("insert into accesoUsuario values (5,7);");
+                db.execSQL("insert into accesoUsuario values (6,8);");
             }catch(SQLException e){e.printStackTrace();}}
 
         @Override
@@ -1264,6 +1359,18 @@ public class ControlBDGpo16 {
                     //Se encontraron datos.
                     return true;}
                 return false;}
+            case 11:{
+                //Verificar que al registrar una solicitud de cambio de nota, existan el examen y la razón.
+                SolicitudDeCambio solicitudDeCambio= (SolicitudDeCambio)dato;
+                String[] id1 = {String.valueOf(solicitudDeCambio.getIdExamen())};
+                String[] id2 = {String.valueOf(solicitudDeCambio.getIdRazon())};
+                abrir();
+                Cursor c1 = db.query("examenIndividual", null, "idExamen = ?", id1,null, null, null);
+                Cursor c2 = db.query("razon", null, "idRazon = ?", id2, null,null, null);
+                if(c1.moveToFirst() && c2.moveToFirst()){
+                    //Se encontraron datos.
+                    return true;}
+                return false;}
             case 12:{
                 //Verificar que exista el usuario para poder actualizarlo.
                 Permiso permiso = (Permiso)dato;
@@ -1297,7 +1404,7 @@ public class ControlBDGpo16 {
                     return true;}
                 return false;}
             case 15:{
-                //Verificar que exista la escuela para poder actualizarlo.
+                //Verificar que exista la escuela para poder actualizarla.
                 Escuela escuela = (Escuela) dato;
                 String[] id = {String.valueOf(escuela.getcodEscuela())};
                 abrir();
@@ -1444,4 +1551,41 @@ public class ControlBDGpo16 {
             db.update("cargo", cv, "idCargo = ?", id);
             return "Registro actualizado correctamente";}
         else{return "El cargo "+cargo.getIdCargo()+" no existe";}}
+        public String insertar(Local local){
+        String regInsertados="¡Local registrado!";
+        long contador=0;
+        ContentValues local_ = new ContentValues();
+        local_.put("idLocal",local.getIdLocal());
+        local_.put("nombre",local.getNombre());
+        contador=db.insert("local", null,local_);
+
+        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+
+        return regInsertados;}
+    public Local consultarLocal(int idLocal){
+        String[] id = {String.valueOf(idLocal)};
+        Cursor cursor = db.query("local", camposLocal, "idLocal = ?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            Local local= new Local();
+            local.setIdLocal(cursor.getInt(0));
+            local.setNombre(cursor.getString(1));
+            return local;}else{return null;}}
+    public String eliminar(Local local) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("local", "idLocal='"+local.getIdLocal()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
+    public String actualizar(Local local) {
+        if(verificarIntegridad(local, 1)){
+            String[] id = {String.valueOf(local.getIdLocal())};
+            ContentValues cv = new ContentValues();
+            cv.put("idLocal",local.getIdLocal());
+            cv.put("nombre",local.getNombre());
+            db.update("local", cv, "idLocal = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "El local "+local.getIdLocal()+" no existe";
+        }
+    }
 }

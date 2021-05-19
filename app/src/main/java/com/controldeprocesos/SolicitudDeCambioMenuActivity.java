@@ -1,7 +1,5 @@
 package com.controldeprocesos;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,10 +8,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class LocalMenuActivity extends ListActivity {
+public class SolicitudDeCambioMenuActivity extends ListActivity {
 
-    String[] menu={"Insertar registro","Eliminar registro","Consultar registro","Actualizar registro"};
-    String[] activities={"LocalInsertarActivity","LocalBorrarActivity","LocalConsultarActivity","LocalActualizarActivity"};
+    private String[] menu={"Insertar registro","Eliminar registro","Consultar registro","Actualizar registro"};
+    private String[] activities={"SolicitudDeCambioInsertarActivity","SolicitudDeCambioBorrarActivity","SolicitudDeCambioConsultarActivity","SolicitudDeCambioActualizarActivity"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

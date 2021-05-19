@@ -21,9 +21,7 @@ public class MateriaConsultarActivity extends AppCompatActivity {
         helper = new ControlBDGpo16(this);
         edtCodMateria=(EditText)findViewById(R.id.edtCodMateria);
         txtCodEscuela=(TextView)findViewById(R.id.txtCodEscuela);
-        txtNombre=(TextView)findViewById(R.id.txtNombre);
-        txtCodEscuela.setText("");
-        txtNombre.setText("");}
+        txtNombre=(TextView)findViewById(R.id.txtNombre);}
 
     public void consultarMateria(View v) {
         helper.abrir();
@@ -32,5 +30,5 @@ public class MateriaConsultarActivity extends AppCompatActivity {
         if(materia == null)
             Toast.makeText(this, "La materia "+edtCodMateria.getText().toString()+ " no ha sido encontrada", Toast.LENGTH_LONG).show();
         else{
-            txtCodEscuela.setText("Código de escuela: "+materia.getCodEscuela());
-            txtNombre.setText("Nombre: "+materia.getNombre());}}}
+            txtCodEscuela.setText(txtCodEscuela.getText()+": "+materia.getCodEscuela());
+            txtNombre.setText(txtNombre.getText()+": "+materia.getNombre());}}}

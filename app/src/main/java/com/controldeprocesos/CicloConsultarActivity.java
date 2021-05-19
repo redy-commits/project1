@@ -20,9 +20,7 @@ public class CicloConsultarActivity extends Activity {
         helper = new ControlBDGpo16(this);
         edtIdCiclo=(EditText)findViewById(R.id.edtIdCiclo);
         txtAnio=(TextView)findViewById(R.id.txtAnio);
-        txtNumCiclo=(TextView)findViewById(R.id.txtNumCiclo);
-        txtAnio.setText("");
-        txtNumCiclo.setText("");}
+        txtNumCiclo=(TextView)findViewById(R.id.txtNumCiclo);}
 
     public void consultarCiclo(View v) {
             helper.abrir();
@@ -31,5 +29,5 @@ public class CicloConsultarActivity extends Activity {
             if(ciclo == null)
                 Toast.makeText(this, "El ciclo "+edtIdCiclo.getText().toString()+ " no ha sido encontrado", Toast.LENGTH_LONG).show();
             else{
-                txtAnio.setText("Año: "+ciclo.getAnio());
-                txtNumCiclo.setText("Número de ciclo: "+ciclo.getNumCiclo());}}}
+                txtAnio.setText(txtAnio.getText()+": "+ciclo.getAnio());
+                txtNumCiclo.setText(txtNumCiclo.getText()+": "+ciclo.getNumCiclo());}}}

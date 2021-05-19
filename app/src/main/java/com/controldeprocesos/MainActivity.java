@@ -10,23 +10,35 @@ import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 
-    String[] menu={"Tabla ExamenIndividual","Tabla Docente","Tabla EncargadoDeImpresiones","Tabla Cargo","Tabla Local","Tabla Matricula","Tabla Estudiante","Tabla SegundaRevision","Tabla Escuela","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Revision","Tabla Reservacion","Tabla Materia","Tabla Ciclo","Cerrar sesión","LLenar base de datos"};
-    String[] activities={"ExamenIndividualMenuActivity","DocenteMenuActivity","EncargadoDeImpresionesMenuActivity","CargoMenuActivity","LocalMenuActivity","MatriculaMenuActivity","EstudianteMenuActivity","SegundaRevisionMenuActivity","EscuelaMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","RevisionMenuActivity","ReservacionMenuActivity","MateriaMenuActivity","CicloMenuActivity","MainActivity"};
-    ControlBDGpo16 helper;
-    Usuario usuario;
+    private String[] menu={"Tabla ExamenIndividual","Tabla Docente","Tabla EncargadoDeImpresiones","Tabla Cargo","Tabla Local","Tabla Matricula","Tabla Estudiante","Tabla SegundaRevision","Tabla Escuela","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Revision","Tabla Reservacion","Tabla Materia","Tabla Ciclo","Cerrar sesión"};
+    private String[] activities={"ExamenIndividualMenuActivity","DocenteMenuActivity","EncargadoDeImpresionesMenuActivity","CargoMenuActivity","LocalMenuActivity","MatriculaMenuActivity","EstudianteMenuActivity","SegundaRevisionMenuActivity","EscuelaMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","RevisionMenuActivity","ReservacionMenuActivity","MateriaMenuActivity","CicloMenuActivity","MainActivity"};
+    private ControlBDGpo16 helper;
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, menu));
         helper = new ControlBDGpo16(this);
 
-        try{
-            helper.abrir();
-            usuario= helper.consultarSesion();
-            helper.cerrar();}
-        catch (Exception e){
-            Toast.makeText(getApplicationContext(),"Control de sesiones mal incorporado",Toast.LENGTH_SHORT).show();}
+        helper.abrir();
+        usuario= helper.consultarSesion();
+        helper.cerrar();
+
+        if(usuario!=null){
+            if(usuario.getTipo().toString().equals("admin")){
+                menu=new String[]{"Tabla SegundaRevision", "Cerrar sesión"};
+                activities= new String[]{"SegundaRevisionMenuActivity", "MainActivity"};
+            }else if(usuario.getTipo().toString().equals("docente")){
+                menu=new String[]{"Tabla ExamenIndividual","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Reservacion","Tabla Revision","Cerrar sesión"};
+                activities= new String[]{"ExamenIndividualMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","ReservacionMenuActivity","RevisionMenuActivity","MainActivity"};
+            }else if(usuario.getTipo().toString().equals("estudiante")){
+                menu=new String[]{"Tabla Matricula","Cerrar sesión"};
+                activities= new String[]{"MatriculaMenuActivity","MainActivity"};
+            }else if(usuario.getTipo().toString().equals("instructor")||usuario.getTipo().toString().equals("encargado")){
+                menu=new String[]{"Tabla SolicitudDeImpresiones","Cerrar sesión"};
+                activities= new String[]{"SolicitudDeImpresionesMenuActivity","MainActivity"};}}
+
+        setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, menu));
 
         if(usuario==null){
             Intent intent = new Intent(MainActivity.this,Login.class);
@@ -38,7 +50,7 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id){
         super.onListItemClick(l, v, position, id);
 
-        if(position!=16){
+        if(position!=menu.length){
             String nombreValue=activities[position];
 
             if(nombreValue=="MainActivity"){
