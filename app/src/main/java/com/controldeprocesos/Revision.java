@@ -10,12 +10,13 @@ public class Revision {
     public Revision() {
     }
 
-    public Revision(int numRev1, int idExamen, boolean asistio, float nuevaNota, String observ) {
+    public Revision(int numRev1, int idExamen, float nuevaNota, String observ, boolean asistio) {
         this.numRev1 = numRev1;
         this.idExamen = idExamen;
-        this.asistio = asistio;
         this.nuevaNota = nuevaNota;
         this.observ = observ;
+        this.asistio = asistio;
+
     }
 
     public int getNumRev1() {

@@ -26,7 +26,7 @@ public class ControlBDGpo16 {
     private static final String[] camposMatricula= new String [] {"idMatricula","carnet","codMateria","idCiclo","numMatricula"};
     private static final String[] camposCargo= new String [] {"idCargo","nombreCargo"};
     private static final String[] camposEvaluacion= new String [] {"numEva", "idDocente", "alumnosEvaluados", "codMateria", "tipo", "fechaRealizacion", "fechaPublicacion"};
-    private static final String[] camposRevision= new String[] {"numRev1", "idExamen", "asistio", "nuevaNota", "observ"};
+    private static final String[] camposRevision= new String [] {"numRev1", "idExamen", "nuevaNota", "observ","asistio"};
     private DatabaseHelper DBHelper;
     private final Context context;
     private SQLiteDatabase db;
@@ -820,9 +820,14 @@ public class ControlBDGpo16 {
         evaluacion_.put("fechaPublicacion", String.valueOf(evaluacion.getFechaPublicacion()));
         contador=db.insert("evaluacion", null,evaluacion_);
 
-        if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
-
-        return regInsertados;}
+        if(contador==-1 || contador==0){
+            regInsertados= "Error al insertar el nuevo registro. Verifique nuevamente";
+        }
+        else{
+            regInsertados=regInsertados+contador;
+        }
+        return regInsertados;
+    }
 
     public Evaluacion consultarEvaluacion(int numEva){
         String[] id = {String.valueOf(numEva)};
@@ -864,21 +869,57 @@ public class ControlBDGpo16 {
 
 // Metodos de la tabla Revision
     public String insertar(Revision revision){
-        String regInsertados="¡Revision registrada!";
+        String regInsertados="¡Revision registrada con exito!";
         long contador=0;
         ContentValues revision_ = new ContentValues();
         revision_.put("numRev1", revision.getNumRev1());
         revision_.put("idExamen", revision.getIdExamen());
-        revision_.put("asistio", revision.isAsistio());
         revision_.put("nuevaNota", revision.getNuevaNota());
         revision_.put("observ", revision.getObserv());
-        contador=db.insert("revision", null,revision_);
+        revision_.put("asistio", revision.isAsistio());
+        contador= db.insert("revision", null, revision_);
 
-    if(contador==-1 || contador==0){regInsertados= "Error al insertar el registro. Verifique la inserción, por favor";}
+    if(contador==-1 || contador==0){
+        regInsertados= "Error al insertar el nuevo registro. Verifique nuevamente";
+    }
+    else{
+        regInsertados=regInsertados+contador;
+    }
+    return regInsertados;
+    }
 
-    return regInsertados;}
+    public Revision consultarRevision(int numRev1){
+        String[] id = {String.valueOf(numRev1)};
+        Cursor cursor = db.query("revision", camposRevision, "numRev1 = ?", id, null, null, null);
 
+        if(cursor.moveToFirst()){
+            Revision revision = new Revision();
+            revision.setNumRev1(cursor.getInt(0));
+            revision.setIdExamen(cursor.getInt(1));
+            revision.setNuevaNota(cursor.getFloat(2));
+            revision.setObserv((cursor.getString(3)));
+            revision.setAsistio(Boolean.valueOf(cursor.getString(5)));
+            return revision;}else{
+            return null;}}
 
+    public String actualizar(Revision revision) {
+        if(verificarIntegridad(revision, 19)){
+            String[] id = {String.valueOf(revision.getNumRev1())};
+            ContentValues cv = new ContentValues();
+            cv.put("idExamen",revision.getIdExamen());
+            cv.put("nuevaNota",revision.getNuevaNota());
+            cv.put("observ",revision.getObserv());
+            cv.put("asistio",revision.isAsistio());
+            db.update("revision", cv, "numRev1 = ?", id);
+            return "Registro actualizado correctamente";}
+        else{return "La revision "+revision.getNumRev1()+" no existe";}}
+
+    public String eliminar(Revision revision) {
+        String regAfectados="Filas afectadas: ";
+        int contador=0;
+        contador+=db.delete("revision", "numRev1='"+revision.getNumRev1()+"'", null);
+        regAfectados+=contador;
+        return regAfectados;}
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -1240,6 +1281,16 @@ public class ControlBDGpo16 {
                 Cursor c = db.query("evaluacion", null, "numEva = ?", id, null, null,null);
                 if(c.moveToFirst()){
                     //Se encontró la evaluacion.
+                    return true;}
+                return false;}
+            case 19:{
+                //Verificar que exista la revision para actualizarla.
+                Revision revision = (Revision) dato;
+                String[] id = {String.valueOf(revision.getNumRev1())};
+                abrir();
+                Cursor c = db.query("revision", null, "numRev1 = ?", id, null, null,null);
+                if(c.moveToFirst()){
+                    //Se encontró la revision.
                     return true;}
                 return false;}
             default:

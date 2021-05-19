@@ -17,12 +17,11 @@ public class RevisionInsertarActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revision_insertar);
         helper = new ControlBDGpo16(this);
-        edtNumRev1 = findViewById(R.id.edtNumRev1);
-        edtIdExamen = findViewById(R.id.edtIdExamen);
-        edtAsistio = findViewById(R.id.edtAsistio);
-        edtNuevaNota = findViewById(R.id.edtNuevaNota);
-        edtObserv = findViewById(R.id.edtObserv);
-
+        edtNumRev1 = (EditText) findViewById(R.id.edtNumRev1);
+        edtIdExamen = (EditText) findViewById(R.id.edtIdExamen);
+        edtNuevaNota = (EditText) findViewById(R.id.edtNuevaNota);
+        edtObserv = (EditText) findViewById(R.id.edtObserv);
+        edtAsistio = (EditText) findViewById(R.id.edtAsistio);
     }
 
     public void insertarRevision(View v) {
@@ -35,9 +34,9 @@ public class RevisionInsertarActivity extends Activity {
         Revision revision= new Revision();
         revision.setNumRev1(numRev1);
         revision.setIdExamen(idExamen);
-        revision.setAsistio(asistio);
         revision.setNuevaNota(nuevaNota);
         revision.setObserv(observ);
+        revision.setAsistio(asistio);
         helper.abrir();
         regInsertados=helper.insertar(revision);
         helper.cerrar();
