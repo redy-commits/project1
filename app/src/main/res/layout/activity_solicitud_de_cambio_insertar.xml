@@ -7,4 +7,68 @@
     android:layout_height="match_parent"
     tools:context=".SolicitudDeCambioInsertarActivity">
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+  <EditText
+      android:id="@+id/edtIdSolicitudCambio"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:ems="10"
+      android:hint="@string/numSolicitud"
+      android:inputType="number"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.079"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <EditText
+      android:id="@+id/edtIdExamen"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:ems="10"
+      android:hint="@string/idExamen"
+      android:inputType="number"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.079"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/edtIdSolicitudCambio" />
+
+  <EditText
+      android:id="@+id/edtIdRazon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:ems="10"
+      android:hint="@string/idRazon"
+      android:inputType="number"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.079"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/edtIdExamen" />
+
+  <EditText
+      android:id="@+id/edtNuevaNota"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:ems="10"
+      android:hint="@string/nuevaNota"
+      android:inputType="numberDecimal"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.079"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/edtIdRazon" />
+
+  <Button
+      android:id="@+id/btnInsertar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:onClick="insertarReservacion"
+      android:text="@string/insertar"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.05"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/edtNuevaNota" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

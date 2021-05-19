@@ -34,4 +34,9 @@
     <string name="horaInicio">Hora de inicio</string>
     <string name="horaFin">Hora de fin</string>
     <string name="fecha">Fecha</string>
+    <string name="numSolicitud">Número de solicitud</string>
+    <string name="idExamen">ID de examen</string>
+    <string name="idRazon">ID de razón</string>
+    <string name="nuevaNota">Nueva nota</string>
+    <string name="estadoAP">Estado de aprobación</string>
 </resources>

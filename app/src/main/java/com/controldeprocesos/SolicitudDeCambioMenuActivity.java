@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 public class SolicitudDeCambioMenuActivity extends ListActivity {
 
-    private String[] menu={"Insertar registro","Eliminar registro","Consultar registro","Actualizar registro"};
+    private String[] menu={"Insertar solicitud de cambio","Eliminar solicitud de cambio","Consultar solicitud de cambio","Aprobar solicitud de cambio"};
     private String[] activities={"SolicitudDeCambioInsertarActivity","SolicitudDeCambioBorrarActivity","SolicitudDeCambioConsultarActivity","SolicitudDeCambioActualizarActivity"};
 
     @Override

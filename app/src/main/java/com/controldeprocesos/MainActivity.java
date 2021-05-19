@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 
-    private String[] menu={"Tabla ExamenIndividual","Tabla Docente","Tabla EncargadoDeImpresiones","Tabla Cargo","Tabla Local","Tabla Matricula","Tabla Estudiante","Tabla SegundaRevision","Tabla Escuela","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Revision","Tabla Reservacion","Tabla Materia","Tabla Ciclo","Cerrar sesión"};
-    private String[] activities={"ExamenIndividualMenuActivity","DocenteMenuActivity","EncargadoDeImpresionesMenuActivity","CargoMenuActivity","LocalMenuActivity","MatriculaMenuActivity","EstudianteMenuActivity","SegundaRevisionMenuActivity","EscuelaMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","RevisionMenuActivity","ReservacionMenuActivity","MateriaMenuActivity","CicloMenuActivity","MainActivity"};
+    private String[] menu={"Tabla ExamenIndividual","Tabla Docente","Tabla EncargadoDeImpresiones","Tabla Cargo","Tabla Local","Tabla Matricula","Tabla Estudiante","Tabla SegundaRevision","Tabla Escuela","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Revision","Tabla Reservacion","Tabla Materia","Tabla Ciclo","Tabla SolicitudDeCambio","Cerrar sesión","Llenar base de datos"};
+    private String[] activities={"ExamenIndividualMenuActivity","DocenteMenuActivity","EncargadoDeImpresionesMenuActivity","CargoMenuActivity","LocalMenuActivity","MatriculaMenuActivity","EstudianteMenuActivity","SegundaRevisionMenuActivity","EscuelaMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","RevisionMenuActivity","ReservacionMenuActivity","MateriaMenuActivity","CicloMenuActivity","SolicitudDeCambioMenuActivity","MainActivity"};
     private ControlBDGpo16 helper;
     private Usuario usuario;
 
@@ -26,17 +26,20 @@ public class MainActivity extends ListActivity {
 
         if(usuario!=null){
             if(usuario.getTipo().toString().equals("admin")){
-                menu=new String[]{"Tabla SegundaRevision", "Cerrar sesión"};
-                activities= new String[]{"SegundaRevisionMenuActivity", "MainActivity"};
+                menu=new String[]{"Tabla SegundaRevision","Tabla SolicitudDeCambio", "Cerrar sesión","Llenar base de datos"};
+                activities= new String[]{"SegundaRevisionMenuActivity","SolicitudDeCambioMenuActivity","MainActivity"};
             }else if(usuario.getTipo().toString().equals("docente")){
-                menu=new String[]{"Tabla ExamenIndividual","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Reservacion","Tabla Revision","Cerrar sesión"};
-                activities= new String[]{"ExamenIndividualMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","ReservacionMenuActivity","RevisionMenuActivity","MainActivity"};
+                menu=new String[]{"Tabla SolicitudDeCambio","Tabla ExamenIndividual","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Reservacion","Tabla Revision","Cerrar sesión","Llenar base de datos"};
+                activities= new String[]{"SolicitudDeCambioMenuActivity","ExamenIndividualMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","ReservacionMenuActivity","RevisionMenuActivity","MainActivity"};
             }else if(usuario.getTipo().toString().equals("estudiante")){
                 menu=new String[]{"Tabla Matricula","Cerrar sesión"};
                 activities= new String[]{"MatriculaMenuActivity","MainActivity"};
-            }else if(usuario.getTipo().toString().equals("instructor")||usuario.getTipo().toString().equals("encargado")){
-                menu=new String[]{"Tabla SolicitudDeImpresiones","Cerrar sesión"};
-                activities= new String[]{"SolicitudDeImpresionesMenuActivity","MainActivity"};}}
+            }else if(usuario.getTipo().toString().equals("encargado")){
+                menu=new String[]{"Tabla SolicitudDeImpresiones","Cerrar sesión","Llenar base de datos"};
+                activities= new String[]{"SolicitudDeImpresionesMenuActivity","MainActivity"};}
+            else if(usuario.getTipo().toString().equals("instructor")){
+                menu=new String[]{"Tabla SolicitudDeImpresiones","Tabla Matricula","Cerrar sesión","Llenar base de datos"};
+                activities= new String[]{"SolicitudDeImpresionesMenuActivity","MatriculaMenuActivity","MainActivity"};}}
 
         setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, menu));
 
@@ -50,7 +53,7 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id){
         super.onListItemClick(l, v, position, id);
 
-        if(position!=menu.length){
+        if(position!=menu.length-1){
             String nombreValue=activities[position];
 
             if(nombreValue=="MainActivity"){
