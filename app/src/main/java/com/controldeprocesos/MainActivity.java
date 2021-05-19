@@ -32,7 +32,7 @@ public class MainActivity extends ListActivity {
                 menu=new String[]{"Tabla SolicitudDeCambio","Tabla ExamenIndividual","Tabla Evaluacion","Tabla SolicitudDeImpresiones","Tabla Reservacion","Tabla Revision","Cerrar sesión","Llenar base de datos"};
                 activities= new String[]{"SolicitudDeCambioMenuActivity","ExamenIndividualMenuActivity","EvaluacionMenuActivity","SolicitudDeImpresionesMenuActivity","ReservacionMenuActivity","RevisionMenuActivity","MainActivity"};
             }else if(usuario.getTipo().toString().equals("estudiante")){
-                menu=new String[]{"Tabla Matricula","Cerrar sesión"};
+                menu=new String[]{"Tabla Matricula","Cerrar sesión","Llenar base de datos"};
                 activities= new String[]{"MatriculaMenuActivity","MainActivity"};
             }else if(usuario.getTipo().toString().equals("encargado")){
                 menu=new String[]{"Tabla SolicitudDeImpresiones","Cerrar sesión","Llenar base de datos"};
