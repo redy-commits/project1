@@ -1059,7 +1059,7 @@ public class ControlBDGpo16 {
 
     public SolicitudDeImpresiones consultarSolicitudDeImpresiones(int idSolicitud){
         String[] id = {String.valueOf(idSolicitud)};
-        Cursor cursor = db.query("solicitud", camposSolicitudDeImpresiones, "idSolicitud = ?", id, null, null, null);
+        Cursor cursor = db.query("solicitudDeImpresiones", camposSolicitudDeImpresiones, "idSolicitud = ?", id, null, null, null);
 
         if(cursor.moveToFirst()){
             SolicitudDeImpresiones solicitud = new SolicitudDeImpresiones();
