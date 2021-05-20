@@ -1046,7 +1046,7 @@ public class ControlBDGpo16 {
         sol.put("idSolicitud", solicitud.getIdSolicitud());
         sol.put("numPaginas", solicitud.getNumPaginas());
         sol.put("estadoAprobado", solicitud.isEstadoAprobado());
-        contador= db.insert("solicitud", null, sol);
+        contador= db.insert("solicitudDeImpresiones", null, sol);
 
         if(contador==-1 || contador==0){
             regInsertados= "Error al insertar el nuevo registro. Verifique nuevamente";
