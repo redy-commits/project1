@@ -984,7 +984,7 @@ public class ControlBDGpo16 {
 
 
 // Metodos de la tabla Revision
-    public String insertar(Revision revision){
+    public String insertarRevision(Revision revision){
         String regInsertados="¡Revision registrada con exito!";
         long contador=0;
         ContentValues revision_ = new ContentValues();
@@ -1014,7 +1014,7 @@ public class ControlBDGpo16 {
             revision.setIdExamen(cursor.getInt(1));
             revision.setNuevaNota(cursor.getFloat(2));
             revision.setObserv((cursor.getString(3)));
-            revision.setAsistio(Boolean.valueOf(cursor.getString(5)));
+            revision.setAsistio(Boolean.parseBoolean(cursor.getString(5)));
             return revision;}else{
             return null;}}
 

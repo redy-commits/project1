@@ -38,7 +38,7 @@ public class RevisionInsertarActivity extends Activity {
         revision.setObserv(observ);
         revision.setAsistio(asistio);
         helper.abrir();
-        regInsertados=helper.insertar(revision);
+        regInsertados=helper.insertarRevision(revision);
         helper.cerrar();
         Toast.makeText(this, regInsertados, Toast.LENGTH_SHORT).show();
     }
