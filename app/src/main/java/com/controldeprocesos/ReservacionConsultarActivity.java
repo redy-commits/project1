@@ -12,6 +12,7 @@ public class ReservacionConsultarActivity extends Activity {
     private ControlBDGpo16 helper;
     private EditText edtIdReservacion;
     private TextView txtFecha,txtHoraInicio,txtHoraFin,txtIdLocal,txtIdDocente;
+    private String docente,local,horaInicio,horaFin,fecha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +24,27 @@ public class ReservacionConsultarActivity extends Activity {
         txtIdDocente=(TextView)findViewById(R.id.txtIdDocente);
         txtHoraInicio=(TextView)findViewById(R.id.txtHoraInicio);
         txtHoraFin=(TextView)findViewById(R.id.txtHoraFin);
-        txtFecha=(TextView)findViewById(R.id.txtFecha);}
+        txtFecha=(TextView)findViewById(R.id.txtFecha);
+        docente=txtIdDocente.getText().toString();
+        local=txtIdLocal.getText().toString();
+        horaFin=txtHoraFin.getText().toString();
+        horaInicio=txtHoraInicio.getText().toString();
+        fecha=txtFecha.getText().toString();}
 
     public void consultarReservacion(View v) {
         helper.abrir();
         Reservacion reservacion = helper.consultarReservacion(Integer.parseInt(edtIdReservacion.getText().toString()));
         helper.cerrar();
-        if(reservacion == null)
+        if(reservacion == null){
             Toast.makeText(this, "La reservación " +edtIdReservacion.getText().toString()+ " no ha sido encontrada", Toast.LENGTH_LONG).show();
+        txtIdDocente.setText(docente+": ");
+        txtIdLocal.setText(local+": ");
+        txtHoraFin.setText(horaFin+": ");
+        txtHoraInicio.setText(horaInicio+": ");
+        txtFecha.setText(fecha+": ");}
         else{
-            txtIdDocente.setText(txtIdDocente.getText()+": "+reservacion.getIdDocente());
-            txtIdLocal.setText(txtIdLocal.getText()+": "+reservacion.getIdLocal());
-            txtHoraFin.setText(txtHoraFin.getText()+": "+reservacion.getHoraFin());
-            txtHoraInicio.setText(txtHoraInicio.getText()+": "+reservacion.getHoraInicio());
-            txtFecha.setText(txtFecha.getText()+": "+reservacion.getFecha());}}}
+            txtIdDocente.setText(docente+": "+reservacion.getIdDocente());
+            txtIdLocal.setText(local+": "+reservacion.getIdLocal());
+            txtHoraFin.setText(horaFin+": "+reservacion.getHoraFin());
+            txtHoraInicio.setText(horaInicio+": "+reservacion.getHoraInicio());
+            txtFecha.setText(fecha+": "+reservacion.getFecha());}}}

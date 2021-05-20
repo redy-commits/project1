@@ -19,7 +19,7 @@
     <string name="idEncargado">idEncargado</string>
     <string name="NumeroEvaluacion">NumeroEvaluacion</string>
     <string name="nota">nota</string>
-    <string name="idRespuesta">idRespuestaSociedad</string>
+    <string name="idRespuesta">idResponsableSociedad</string>
     <string name="acceder">Acceder</string>
     <string name="username">Correo o carnet</string>
     <string name="idCiclo">ID de ciclo</string>
@@ -39,7 +39,7 @@
     <string name="idRazon">ID de razón</string>
     <string name="nuevaNota">Nueva nota</string>
     <string name="estadoAP">Estado de aprobación</string>
-    <string name="idMatricula">ID de Matricula</string>
+    <string name="idMatricula">ID de matrícula</string>
     <string name="nombreCargo">Nombre del Cargo</string>
-    <string name="numMatricula">Numero de Matricula</string>
+    <string name="numMatricula">Número de matrícula</string>
 </resources>

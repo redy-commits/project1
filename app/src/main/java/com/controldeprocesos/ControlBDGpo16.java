@@ -1282,10 +1282,12 @@ public class ControlBDGpo16 {
                 db.execSQL("insert into accesoUsuario values (3,9);");
                 db.execSQL("insert into accesoUsuario values (3,1);");
                 db.execSQL("insert into accesoUsuario values (4,6);");
+                db.execSQL("insert into accesoUsuario values (5,6);");
                 db.execSQL("insert into accesoUsuario values (5,7);");
                 db.execSQL("insert into accesoUsuario values (6,8);");
                 db.execSQL("insert into examenIndividual values (1,1,'SA18043',4.2);");
                 db.execSQL("insert into razon values (1,'Error en la sumatoria de puntos','El docente se equivocó al momento de sumar los puntos obtenidos en cada apartado del examen.');");
+                db.execSQL("insert into local values (1,'B11');");
             }catch(SQLException e){e.printStackTrace();}}
 
         @Override
