@@ -360,11 +360,56 @@ public class ControlBDGpo16 {
 
 
         }else{
-            return null;
+            return "El estudiante no realizo el examen";
         }
    }
-   //------------------------------CONSULTAR SEGUNDA REVISION---------------------------------------------//
-   public String consultarSegundaRevision( String carnet, String numeva) {
+   //------------------------------Actualizar SEGUNDA REVISION---------------------------------------------//
+   public String actualizarSegundaRevision( SegundaRevision segunda,String carnet, String numeva) {
+       String[] id = {carnet,numeva};
+       String regInsertados="Actualizado correctamente";
+       long contador=0;
+       Cursor cursor = db.query("examenIndividual", camposExamenIndividual, "carnet = ? AND numEva=?",  id, null, null, null);
+       if(cursor.moveToFirst()){
+           ExamenIndividual examen = new ExamenIndividual();
+           int idExamen= Integer.parseInt(cursor.getString(0));
+           String [] idu={String.valueOf(idExamen)};
+           ContentValues exam = new ContentValues();
+           int idDocente=segunda.getIdDocente();
+           int idOtroDocente=segunda.getIdOtroDocente();
+           float notaDefinitiva= segunda.getNotaDefinitiva();
+           String respSociedadEstud = segunda.getRespSociedadEstud();
+           if ( idDocente != 0) {
+               exam.put("idDocente", segunda.getIdDocente());
+           }
+           if ( idOtroDocente != 0) {
+               exam.put("idOtroDocente", segunda.getIdOtroDocente());
+           }
+           if ( respSociedadEstud != "") {
+               exam.put("respSociedadEstud", segunda.getRespSociedadEstud());
+           }
+           if ( notaDefinitiva != 0) {
+               exam.put("notaDefinitiva", segunda.getNotaDefinitiva());
+           }
+
+
+//("escuela", u, "codEscuela = ?", id);
+           contador=db.update("segundaRevision",  exam,"idExamen =?",idu);
+           if(contador==-1 || contador==0)
+           {
+               regInsertados= "Error al Actualizar el registro";
+           }
+           else {
+               regInsertados=regInsertados+contador;
+           }
+           return regInsertados;
+
+
+       }else{
+           return null;
+       }
+   }
+    //------------------------------CONSULTAR SEGUNDA REVISION---------------------------------------------//
+    public String consultarSegundaRevision( String carnet, String numeva) {
        String[] id = {carnet,numeva};
        Cursor cursor = db.query("examenIndividual", camposExamenIndividual, "carnet = ? AND numEva=?",  id, null, null, null);
        if(cursor.moveToFirst()){
@@ -456,6 +501,7 @@ public class ControlBDGpo16 {
         escu.put("codEscuela", escuela.getcodEscuela());
         escu.put("nombre", escuela.getNombre());
         contador=db.insert("escuela", null, escu);
+
         if(contador==-1 || contador==0)
         {
             regInsertados= "Error al Insertar el registro, Registro  Duplicado. Verificar inserción";
@@ -477,6 +523,7 @@ public class ControlBDGpo16 {
         regAfectados+=contador;
         return regAfectados;
     }
+    //---------------------------------------------METODO ACTUALIZAR ESCUELA----------------------------------------------------
     public String actualizar(Escuela escuela){
         if(verificarIntegridad(escuela, 15)){
             String[] id = {String.valueOf(escuela.getcodEscuela())};
