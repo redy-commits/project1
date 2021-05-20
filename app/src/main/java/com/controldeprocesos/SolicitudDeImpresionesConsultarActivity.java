@@ -32,7 +32,8 @@ public class SolicitudDeImpresionesConsultarActivity extends Activity {
         if(solicitud == null)
             Toast.makeText(this, "Solicitud de impresion " + edtIdSolicitud.getText().toString() + " no encontrada", Toast.LENGTH_LONG).show();
         else {
-            edtIdSolicitud.setText(String.valueOf(solicitud.getIdSolicitud()));
+            edtNumPaginas.setText(String.valueOf(solicitud.getNumPaginas()));
+
         }
     }
 

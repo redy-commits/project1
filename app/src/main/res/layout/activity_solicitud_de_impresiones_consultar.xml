@@ -45,20 +45,6 @@
         android:focusableInTouchMode="false"
         android:cursorVisible="false"
         android:longClickable="false" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Estado Aprobado" />
-    <EditText
-        android:id="@+id/edtEstadoAprobado"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:enabled ="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:cursorVisible="false"
-        android:longClickable="false"
-/>
+
 
 </LinearLayout>
