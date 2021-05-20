@@ -39,4 +39,7 @@
     <string name="idRazon">ID de razón</string>
     <string name="nuevaNota">Nueva nota</string>
     <string name="estadoAP">Estado de aprobación</string>
+    <string name="idMatricula">ID de Matricula</string>
+    <string name="nombreCargo">Nombre del Cargo</string>
+    <string name="numMatricula">Numero de Matricula</string>
 </resources>
