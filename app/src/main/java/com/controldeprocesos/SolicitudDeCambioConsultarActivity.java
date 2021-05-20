@@ -15,6 +15,7 @@ public class SolicitudDeCambioConsultarActivity extends AppCompatActivity {
     private EditText edtIdSolicitudCambio;
     private TextView txtIdExamen,txtIdRazon,txtNuevaNota;
     private CheckBox cbEstadoAP;
+    private String examen,razon,nota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +26,23 @@ public class SolicitudDeCambioConsultarActivity extends AppCompatActivity {
         txtIdExamen=(TextView)findViewById(R.id.txtIdExamen);
         txtIdRazon=(TextView)findViewById(R.id.txtIdRazon);
         txtNuevaNota=(TextView)findViewById(R.id.txtNuevaNota);
-        cbEstadoAP=(CheckBox)findViewById(R.id.cbEstadoAP);}
+        cbEstadoAP=(CheckBox)findViewById(R.id.cbEstadoAP);
+        examen=txtIdExamen.getText().toString();
+        razon=txtIdRazon.getText().toString();
+        nota=txtNuevaNota.getText().toString();}
 
     public void consultarSolicitudDeCambio(View v) {
         helper.abrir();
         SolicitudDeCambio solicitudDeCambio = helper.consultarSolicitudDeCambio(Integer.parseInt(edtIdSolicitudCambio.getText().toString()));
         helper.cerrar();
-        if(solicitudDeCambio == null)Toast.makeText(this, "El número de solicitud de cambio " +edtIdSolicitudCambio.getText().toString()+ " no ha sido encontrada", Toast.LENGTH_LONG).show();
+        if(solicitudDeCambio == null){
+            Toast.makeText(this, "El número de solicitud de cambio " +edtIdSolicitudCambio.getText().toString()+ " no ha sido encontrada", Toast.LENGTH_LONG).show();
+            txtIdExamen.setText(examen+": ");
+            txtIdRazon.setText(razon+": ");
+            txtNuevaNota.setText(nota+": ");
+            cbEstadoAP.setChecked(false);}
         else{
-            txtIdExamen.setText(txtIdExamen.getText()+": "+solicitudDeCambio.getIdExamen());
-            txtIdRazon.setText(txtIdRazon.getText()+": "+solicitudDeCambio.getIdRazon());
-            txtNuevaNota.setText(txtNuevaNota.getText()+": "+solicitudDeCambio.getNuevaNota());
+            txtIdExamen.setText(examen+": "+solicitudDeCambio.getIdExamen());
+            txtIdRazon.setText(razon+": "+solicitudDeCambio.getIdRazon());
+            txtNuevaNota.setText(nota+": "+solicitudDeCambio.getNuevaNota());
             cbEstadoAP.setChecked(solicitudDeCambio.isEstadoAprobado());}}}
