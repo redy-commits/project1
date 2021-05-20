@@ -27,7 +27,7 @@
     </TableRow>
     <TableRow>
         <Button
-            android:onClick="insertarSolicitudDeImpresion"
+            android:onClick="insertarSolicitudDeImpresiones"
             android:text="insertar" />
         <Button
             android:onClick="limpiarTexto"
