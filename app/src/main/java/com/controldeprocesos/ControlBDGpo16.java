@@ -7,8 +7,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
-
 import java.sql.Date;
 
 public class ControlBDGpo16 {
@@ -1190,7 +1188,7 @@ public class ControlBDGpo16 {
                 db.execSQL("create index es_2_fk on estudiante (idUsuario asc);");
                 db.execSQL("CREATE TABLE docente(idDocente INTEGER NOT NULL PRIMARY KEY,idUsuario integer,foreign key (idUsuario) references usuario (idUsuario));");
                 db.execSQL("create index es_fk on docente (idUsuario asc);");
-                db.execSQL("CREATE TABLE escuela(codEscuela INTEGER NOT NULL PRIMARY KEY,nombre VARCHAR(75));");
+                db.execSQL("CREATE TABLE escuela(codEscuela varchar(10) NOT NULL PRIMARY KEY,nombre VARCHAR(75));");
                 db.execSQL("CREATE TABLE materia(codMateria VARCHAR(6) NOT NULL PRIMARY KEY,codEscuela varchar(10),nombre VARCHAR(75),foreign key (codEscuela) references escuela (codEscuela));");
                 db.execSQL("create index tiene_2_fk on materia (codEscuela asc);");
                 db.execSQL("CREATE TABLE evaluacion(numEva INTEGER NOT NULL PRIMARY KEY,idDocente integer,codMateria varchar(6),tipo VARCHAR(10),alumnosEvaluados integer,fechaRealización date,fechaPublicacion date,foreign key (idDocente) references docente (idDocente),foreign key (codMateria) references materia (codMateria));");
@@ -1212,12 +1210,12 @@ public class ControlBDGpo16 {
                 db.execSQL("create index imparte_fk on catedra (idDocente asc);");
                 db.execSQL("create index imparte2_fk on catedra (codMateria asc);");
                 db.execSQL("create index imparte3_fk on catedra (idCiclo asc);");
-                db.execSQL("CREATE TABLE emite(idDocente INTEGER NOT NULL,idSolicitud NOT NULL,constraint pk_emite primary key (idDocente,idSolicitud),foreign key (idDocente) references docente (idDocente),foreign key (idSolicitud) references solicitudDeImpresiones (idSolicitud));");
+                db.execSQL("CREATE TABLE emite(idDocente INTEGER NOT NULL,idSolicitud integer NOT NULL,constraint pk_emite primary key (idDocente,idSolicitud),foreign key (idDocente) references docente (idDocente),foreign key (idSolicitud) references solicitudDeImpresiones (idSolicitud));");
                 db.execSQL("create index emite_fk on emite (idDocente asc);");
                 db.execSQL("create index emite2_fk on emite (idSolicitud asc);");
                 db.execSQL("create table instructor(idInstructor integer not null primary key,carnet varchar(7),foreign key (carnet) references estudiante (carnet));");
                 db.execSQL("create index es_6_fk on instructor (carnet asc);");
-                db.execSQL("CREATE TABLE emite_2(idInstructor INTEGER NOT NULL,idSolicitud NOT NULL,constraint pk_emite_2 primary key (idInstructor,idSolicitud),foreign key (idInstructor) references instructor (idInstructor),foreign key (idSolicitud) references solicitudDeImpresiones (idSolicitud));");
+                db.execSQL("CREATE TABLE emite_2(idInstructor INTEGER NOT NULL,idSolicitud integer NOT NULL,constraint pk_emite_2 primary key (idInstructor,idSolicitud),foreign key (idInstructor) references instructor (idInstructor),foreign key (idSolicitud) references solicitudDeImpresiones (idSolicitud));");
                 db.execSQL("create index emite_2_fk on emite_2 (idInstructor asc);");
                 db.execSQL("create index emite_3_fk on emite_2 (idSolicitud asc);");
                 db.execSQL("create table solicitudDeDiferido(idSolicitudDiferido integer not null primary key,idExamen integer,estadoAprobado boolean,foreign key (idExamen) references examenIndividual (idExamen));");
@@ -1234,7 +1232,7 @@ public class ControlBDGpo16 {
                 db.execSQL("create index posee_fk on posee (idDocente asc);");
                 db.execSQL("create index posee2_fk on posee (idCargo asc);");
                 db.execSQL("create table solicitudDeRevision(idSolicitudRevision integer not null primary key,numRev integer,idRevision integer);");
-                db.execSQL("CREATE TABLE recibe(idDocente INTEGER NOT NULL,idSolicitudRevision NOT NULL,constraint pk_recibe primary key (idDocente,idSolicitudRevision),foreign key (idDocente) references docente (idDocente),foreign key (idSolicitudRevision) references solicitudDeRevision (idSolicitudRevision));");
+                db.execSQL("CREATE TABLE recibe(idDocente INTEGER NOT NULL,idSolicitudRevision integer NOT NULL,constraint pk_recibe primary key (idDocente,idSolicitudRevision),foreign key (idDocente) references docente (idDocente),foreign key (idSolicitudRevision) references solicitudDeRevision (idSolicitudRevision));");
                 db.execSQL("create index recibe_fk on recibe (idDocente asc);");
                 db.execSQL("create index recibe2_fk on recibe (idSolicitudRevision asc);");
                 db.execSQL("CREATE TABLE reservacion(idReservacion INTEGER NOT NULL PRIMARY KEY,idLocal integer,idDocente integer,horaInicio VARCHAR(5),fecha DATE,horaFin VARCHAR(5),foreign key (idDocente) references docente (idDocente),foreign key (idLocal) references local (idLocal));");
@@ -1252,7 +1250,7 @@ public class ControlBDGpo16 {
                 db.execSQL("create trigger updateNotaSR after insert on segundaRevision begin update examenIndividual set nota=new.notaDefinitiva where examenIndividual.idExamen=new.idExamen; END;");
                 db.execSQL("create trigger updateNotaR after update on solicitudDeCambio when new.estadoAprobado=1 begin update examenIndividual set nota=new.nuevaNota where examenIndividual.idExamen=new.idExamen; END;");
                 db.execSQL("create trigger updateSolicitudI after update on solicitudDeImpresiones when new.numPaginas<>old.numPaginas begin update solicitudDeImpresiones set estadoAprobado=0 where solicitudDeImpresiones.idSolicitud=new.idSolicitud; END;");
-                db.execSQL("insert into usuario values (1,'superusuario','1234','Súper Usuario','superuser@gmail.com',0);");
+                db.execSQL("insert into usuario values (1,'superuser','1234','Súper Usuario','superuser@gmail.com',0);");
                 db.execSQL("insert into usuario values (2,'docente','2345','César Augusto González Rodríguez','cesar.gonzalez@gmail.com',0);");
                 db.execSQL("insert into docente values (1,2);");
                 db.execSQL("insert into usuario values (3,'admin','3456','Verónica Rocío Almogabar Santos','veronica.almogabar@gmail.com',0);");
@@ -1260,7 +1258,7 @@ public class ControlBDGpo16 {
                 db.execSQL("insert into usuario values (4,'estudiante','4567','Daniela Katherinne Suarique Ávila','daniela.suarique@gmail.com',0);");
                 db.execSQL("insert into estudiante values ('SA18043',4);");
                 db.execSQL("insert into usuario values (5,'instructor','5678','Oscar Ricardo Ovalle Solano','oscar.ovalle@gmail.com',0);");
-                db.execSQL("insert into instructor values (1,5);");
+                db.execSQL("insert into instructor values (1,'SA18043');");
                 db.execSQL("insert into usuario values (6,'encargado','6789','Jorge Esteban Coral Burbano','jorge.coral@gmail.com',0);");
                 db.execSQL("insert into encargadoDeImpresiones values (1,6);");
                 db.execSQL("insert into permiso values (1,'Manipular tabla segundaRevision');");
@@ -1285,6 +1283,9 @@ public class ControlBDGpo16 {
                 db.execSQL("insert into accesoUsuario values (5,6);");
                 db.execSQL("insert into accesoUsuario values (5,7);");
                 db.execSQL("insert into accesoUsuario values (6,8);");
+                db.execSQL("insert into escuela values ('1','Escuela de Ingerniería de Sistemas Informáticos');");
+                db.execSQL("insert into materia values ('MAT115','1','Matemática I');");
+                db.execSQL("insert into evaluacion values (1,1,'MAT115','Ordinaria',84,01/07/2021,15/06/2021);");
                 db.execSQL("insert into examenIndividual values (1,1,'SA18043',4.2);");
                 db.execSQL("insert into razon values (1,'Error en la sumatoria de puntos','El docente se equivocó al momento de sumar los puntos obtenidos en cada apartado del examen.');");
                 db.execSQL("insert into local values (1,'B11');");
