@@ -1188,8 +1188,8 @@ public class ControlBDGpo16 {
                 db.execSQL("create index es_2_fk on estudiante (idUsuario asc);");
                 db.execSQL("CREATE TABLE docente(idDocente INTEGER NOT NULL PRIMARY KEY,idUsuario integer,foreign key (idUsuario) references usuario (idUsuario));");
                 db.execSQL("create index es_fk on docente (idUsuario asc);");
-                db.execSQL("CREATE TABLE escuela(codEscuela varchar(10) NOT NULL PRIMARY KEY,nombre VARCHAR(75));");
-                db.execSQL("CREATE TABLE materia(codMateria VARCHAR(6) NOT NULL PRIMARY KEY,codEscuela varchar(10),nombre VARCHAR(75),foreign key (codEscuela) references escuela (codEscuela));");
+                db.execSQL("CREATE TABLE escuela(codEscuela integer NOT NULL PRIMARY KEY,nombre VARCHAR(75));");
+                db.execSQL("CREATE TABLE materia(codMateria VARCHAR(6) NOT NULL PRIMARY KEY,codEscuela integer,nombre VARCHAR(75),foreign key (codEscuela) references escuela (codEscuela));");
                 db.execSQL("create index tiene_2_fk on materia (codEscuela asc);");
                 db.execSQL("CREATE TABLE evaluacion(numEva INTEGER NOT NULL PRIMARY KEY,idDocente integer,codMateria varchar(6),tipo VARCHAR(10),alumnosEvaluados integer,fechaRealización date,fechaPublicacion date,foreign key (idDocente) references docente (idDocente),foreign key (codMateria) references materia (codMateria));");
                 db.execSQL("create index crea_fk on evaluacion (idDocente asc);");
@@ -1284,7 +1284,8 @@ public class ControlBDGpo16 {
                 db.execSQL("insert into accesoUsuario values (5,7);");
                 db.execSQL("insert into accesoUsuario values (6,8);");
                 db.execSQL("insert into escuela values ('1','Escuela de Ingerniería de Sistemas Informáticos');");
-                db.execSQL("insert into materia values ('MAT115','1','Matemática I');");
+                db.execSQL("insert into escuela values ('2','Unidad De Ciencias Básicas');");
+                db.execSQL("insert into materia values ('MAT115','2','Matemática I');");
                 db.execSQL("insert into evaluacion values (1,1,'MAT115','Ordinaria',84,01/07/2021,15/06/2021);");
                 db.execSQL("insert into examenIndividual values (1,1,'SA18043',4.2);");
                 db.execSQL("insert into razon values (1,'Error en la sumatoria de puntos','El docente se equivocó al momento de sumar los puntos obtenidos en cada apartado del examen.');");

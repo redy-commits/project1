@@ -53,7 +53,5 @@ public class SolicitudDeCambioInsertarActivity extends AppCompatActivity {
 
         //Parte del servicio de consumo web.
         String url = null;
-        JSONObject datos = new JSONObject();
-        JSONObject nota = new JSONObject();
         url = urlS+ "?idSolicitudCambio=" +idSolicitudCambio+ "&idExamen="+idExamen+ "&idRazon=" +idRazon+ "&nuevaNota=" +nuevaNota+ "&estadoAprobado=0";
-        ControladorServicio.insertarSoliCambio(url, this);}}
+        ControladorServicio.insertar(url, this);}}
