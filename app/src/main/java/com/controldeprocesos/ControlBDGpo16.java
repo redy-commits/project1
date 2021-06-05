@@ -1261,6 +1261,10 @@ public class ControlBDGpo16 {
                 db.execSQL("insert into instructor values (1,'SA18043');");
                 db.execSQL("insert into usuario values (6,'encargado','6789','Jorge Esteban Coral Burbano','jorge.coral@gmail.com',0);");
                 db.execSQL("insert into encargadoDeImpresiones values (1,6);");
+                db.execSQL("insert into usuario values (7,'docente','2345','Cristian Arnoldo Puyol Mancía','cristian.puyol@gmail.com',0);");
+                db.execSQL("insert into docente values (2,7);");
+                db.execSQL("insert into usuario values (8,'estudiante','4567','Santos Vladimir Chávez Nolasco','santoschavezn@gmail.com',0);");
+                db.execSQL("insert into estudiante values ('CN18006',8);");
                 db.execSQL("insert into permiso values (1,'Manipular tabla segundaRevision');");
                 db.execSQL("insert into permiso values (2,'Manipular tabla examenIndividual');");
                 db.execSQL("insert into permiso values (3,'Manipular tabla evaluacion');");
@@ -1277,9 +1281,16 @@ public class ControlBDGpo16 {
                 db.execSQL("insert into accesoUsuario values (2,5);");
                 db.execSQL("insert into accesoUsuario values (2,7);");
                 db.execSQL("insert into accesoUsuario values (2,10);");
+                db.execSQL("insert into accesoUsuario values (7,2);");
+                db.execSQL("insert into accesoUsuario values (7,3);");
+                db.execSQL("insert into accesoUsuario values (7,4);");
+                db.execSQL("insert into accesoUsuario values (7,5);");
+                db.execSQL("insert into accesoUsuario values (7,7);");
+                db.execSQL("insert into accesoUsuario values (7,10);");
                 db.execSQL("insert into accesoUsuario values (3,9);");
                 db.execSQL("insert into accesoUsuario values (3,1);");
                 db.execSQL("insert into accesoUsuario values (4,6);");
+                db.execSQL("insert into accesoUsuario values (8,6);");
                 db.execSQL("insert into accesoUsuario values (5,6);");
                 db.execSQL("insert into accesoUsuario values (5,7);");
                 db.execSQL("insert into accesoUsuario values (6,8);");
