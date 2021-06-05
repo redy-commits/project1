@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,11 +15,15 @@ public class LocalInsertarActivity extends Activity {
 
     private ControlBDGpo16 helper;
     private EditText edtIdLocal,edtNombre;
+    //Para el servicio web
+    private String urlS= "https://cn18006pdm115.000webhostapp.com/p1/insertarLocal.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_insertar);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         helper = new ControlBDGpo16(this);
         edtIdLocal=(EditText)findViewById(R.id.edtIdLocal);
         edtNombre=(EditText)findViewById(R.id.edtNombre);
@@ -34,5 +39,11 @@ public class LocalInsertarActivity extends Activity {
         helper.abrir();
         regInsertados=helper.insertar(local);
         helper.cerrar();
-        Toast.makeText(this, regInsertados, Toast.LENGTH_SHORT).show();}
+        Toast.makeText(this, regInsertados, Toast.LENGTH_SHORT).show();
+
+        //servicio de consumo web.
+        String url = null;
+        url = urlS+ "?idLocal=" +idLocal+ "&nombre="+nombre;
+        ControladorServicio.insertar(url, this);
+    }
 }
